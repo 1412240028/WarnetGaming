@@ -1,4 +1,4 @@
-$kind: http-request
+﻿$kind: http-request
 name: "[POST] api/login"
 url: "{{base_url}}/login"
 method: POST
@@ -10,4 +10,16 @@ body:
     {
         
     }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      const jsonData = pm.response.json();
+      const token = jsonData.token || (jsonData.data && jsonData.data.token);
+      if (token) {
+          pm.environment.set('token', token);
+          console.log('Token saved to environment variable token');
+      } else {
+          console.warn('No token found in response');
+      }
 order: 1000

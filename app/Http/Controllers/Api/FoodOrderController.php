@@ -9,6 +9,7 @@ use App\Models\FoodBeverage;
 use App\Models\GamingSession;
 use App\Http\Requests\StoreFoodOrderRequest;
 use App\Http\Requests\UpdateFoodOrderStatusRequest;
+use App\Exceptions\InsufficientStockException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -38,8 +39,13 @@ class FoodOrderController extends Controller
                 $food = FoodBeverage::lockForUpdate()->findOrFail($item['food_beverage_id']);
                 
                 if ($food->stock < $item['quantity']) {
-                    throw new \Exception("Insufficient stock for {$food->name}");
+                    throw new InsufficientStockException(
+                        $food->name,
+                        $food->stock,
+                        $item['quantity']
+                    );
                 }
+
 
                 $food->decrement('stock', $item['quantity']);
                 

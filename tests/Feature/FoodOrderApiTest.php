@@ -91,14 +91,23 @@ class FoodOrderApiTest extends TestCase
             'items' => [
                 [
                     'food_beverage_id' => $this->food->id,
-                    'quantity' => 20, // More than stock (10)
+                    'quantity' => 20, // lebih dari stock (10)
                 ]
             ]
         ];
 
         $response = $this->actingAs($this->user, 'sanctum')->postJson('/api/food-orders', $payload);
-        $response->assertStatus(500); // Because we throw an Exception in the transaction, it returns 500 in test unless caught.
+
+        $response->assertStatus(409);
+        $response->assertJson(['error' => 'insufficient_stock']);
+
+        // pastiin rollback beneran jalan, stock gak berubah
+        $this->assertDatabaseHas('food_beverages', [
+            'id' => $this->food->id,
+            'stock' => 10,
+        ]);
     }
+
 
     public function test_validation_fails_for_invalid_items()
     {
