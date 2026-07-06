@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\SessionGameController;
 use App\Http\Controllers\Api\BookingSessionController;
 use App\Http\Controllers\Api\GameController;
 use App\Http\Controllers\Api\PelangganController;
+use App\Http\Controllers\Api\FoodOrderController;
+use App\Http\Controllers\Api\FoodBeverageController;
 
 use App\Http\Controllers\Api\AuthController;
 
@@ -28,30 +30,30 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('games', GameController::class)->only(['index', 'show']);
     Route::get('/gaming-sessions', [GamingSessionController::class, 'index']);
     Route::get('/gaming-sessions/{gamingSession}', [GamingSessionController::class, 'show']);
-    Route::get('/food-beverages', [\App\Http\Controllers\Api\FoodBeverageController::class, 'index']);
-    Route::get('/food-beverages/{foodBeverage}', [\App\Http\Controllers\Api\FoodBeverageController::class, 'show']);
-    Route::get('/food-orders', [\App\Http\Controllers\Api\FoodOrderController::class, 'index']);
-    Route::get('/food-orders/{foodOrder}', [\App\Http\Controllers\Api\FoodOrderController::class, 'show']);
+    Route::apiResource('food-beverages', FoodBeverageController::class)->only(['index', 'show']);
+    Route::apiResource('food-orders', FoodOrderController::class)->only(['index', 'show']);
 
     // Endpoint khusus ADMIN
     Route::middleware('role:admin')->group(function () {
         Route::apiResource('rooms', RoomController::class)->except(['index', 'show']);
         Route::apiResource('operators', OperatorController::class);
         Route::apiResource('memberships', MembershipController::class);
-        Route::post('/food-beverages', [\App\Http\Controllers\Api\FoodBeverageController::class, 'store']);
-        Route::put('/food-beverages/{foodBeverage}', [\App\Http\Controllers\Api\FoodBeverageController::class, 'update']);
-        Route::delete('/food-beverages/{foodBeverage}', [\App\Http\Controllers\Api\FoodBeverageController::class, 'destroy']);
+        Route::post('/food-beverages', [FoodBeverageController::class, 'store']);
+        Route::put('/food-beverages/{foodBeverage}', [FoodBeverageController::class, 'update']);
+        Route::delete('/food-beverages/{foodBeverage}', [FoodBeverageController::class, 'destroy']);
     });
 
     // Endpoint ADMIN + OPERATOR (operasional harian)
     Route::middleware('role:admin,operator')->group(function () {
-        Route::put('/food-orders/{foodOrder}/status', [\App\Http\Controllers\Api\FoodOrderController::class, 'updateStatus']);
+        Route::put('/food-orders/{foodOrder}/status', [FoodOrderController::class, 'updateStatus']);
         Route::delete('/gaming-sessions/{gamingSession}', [GamingSessionController::class, 'destroy']);
+        Route::apiResource('payments', PaymentController::class);
+        Route::apiResource('pelanggans', PelangganController::class)->only(['index', 'show', 'update']);
     });
 
     // Endpoint PELANGGAN (booking & transaksi milik sendiri)
     Route::post('/booking-sessions', [BookingSessionController::class, 'store']);
-    Route::post('/food-orders', [\App\Http\Controllers\Api\FoodOrderController::class, 'store']);
+    Route::post('/food-orders', [FoodOrderController::class, 'store']);
     Route::get('/gaming-sessions/{gamingSessionId}/games', [SessionGameController::class, 'index']);
     Route::post('/gaming-sessions/{gamingSessionId}/games', [SessionGameController::class, 'store']);
 });
