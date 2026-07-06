@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\GamingSession;
+use App\Services\GamingSessionService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class GamingSessionController extends Controller
 {
@@ -44,13 +44,14 @@ class GamingSessionController extends Controller
             'started_at' => 'nullable|date',
         ]);
 
-        $created = null;
-        DB::transaction(function () use (&$created, $validated) {
-            $created = GamingSession::create(array_merge($validated, [
-                'status' => 'active',
-                'started_at' => $validated['started_at'] ?? now(),
-            ]));
-        });
+        $service = new GamingSessionService();
+        $created = $service->createActiveSession([
+            'pelanggan_id' => $validated['pelanggan_id'],
+            'room_id' => $validated['room_id'],
+            'pc_id' => $validated['pc_id'],
+            'operator_id' => $validated['operator_id'],
+            'started_at' => $validated['started_at'] ?? now(),
+        ]);
 
         return response()->json(['message' => 'Gaming session berhasil dibuat', 'data' => $created], 201);
     }

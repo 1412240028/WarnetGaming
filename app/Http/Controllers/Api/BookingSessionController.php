@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\GamingSession;
+use App\Services\GamingSessionService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class BookingSessionController extends Controller
 {
@@ -19,19 +18,14 @@ class BookingSessionController extends Controller
         ]);
 
 
-        $created = null;
-        DB::transaction(function () use (&$created, $validated) {
-            // TODO: implement race-condition safety and PC availability check
-            $created = GamingSession::create([
-                'pelanggan_id' => $validated['pelanggan_id'],
-                'room_id' => $validated['room_id'],
-                'pc_id' => $validated['pc_id'],
-                'operator_id' => $validated['operator_id'],
-                'status' => 'active',
-                'started_at' => now(),
-            ]);
-
-        });
+        $service = new GamingSessionService();
+        $created = $service->createActiveSession([
+            'pelanggan_id' => $validated['pelanggan_id'],
+            'room_id' => $validated['room_id'],
+            'pc_id' => $validated['pc_id'],
+            'operator_id' => $validated['operator_id'],
+            'started_at' => now(),
+        ]);
 
         return response()->json($created, 201);
     }

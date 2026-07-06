@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Exceptions\DuplicateSessionGameException;
 use App\Models\SessionGame;
 use Illuminate\Http\Request;
 
@@ -22,6 +23,16 @@ class SessionGameController extends Controller
             'played_at' => 'nullable|date',
             'notes' => 'nullable|string|max:255',
         ]);
+
+        // Application-level guard (unique constraint also protects DB)
+        $alreadyExists = SessionGame::query()
+            ->where('gaming_session_id', $gamingSessionId)
+            ->where('game_id', (int) $validated['game_id'])
+            ->exists();
+
+        if ($alreadyExists) {
+            throw new DuplicateSessionGameException('Game sudah ada pada session ini');
+        }
 
         $sessionGame = SessionGame::create(array_merge($validated, [
             'gaming_session_id' => $gamingSessionId,
