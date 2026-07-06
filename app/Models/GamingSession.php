@@ -4,6 +4,40 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property int $pelanggan_id
+ * @property int $operator_id
+ * @property int $pc_id
+ * @property int $room_id
+ * @property \Illuminate\Support\Carbon $started_at
+ * @property \Illuminate\Support\Carbon|null $ended_at
+ * @property string $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Game> $games
+ * @property-read int|null $games_count
+ * @property-read \App\Models\Operator $operator
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Payment> $payments
+ * @property-read int|null $payments_count
+ * @property-read \App\Models\Pc $pc
+ * @property-read \App\Models\Pelanggan $pelanggan
+ * @property-read \App\Models\Room $room
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GamingSession newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GamingSession newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GamingSession query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GamingSession whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GamingSession whereEndedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GamingSession whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GamingSession whereOperatorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GamingSession wherePcId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GamingSession wherePelangganId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GamingSession whereRoomId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GamingSession whereStartedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GamingSession whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GamingSession whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class GamingSession extends Model
 {
     protected $fillable = [
