@@ -48,5 +48,22 @@ class Operator extends Model
     {
         return $this->hasMany(GamingSession::class, 'operator_id');
     }
-}
 
+    /**
+     * Scope: filter operator berdasarkan shift kerja (pagi/siang/malam).
+     * Contoh: Operator::onShift('pagi')->get();
+     */
+    public function scopeOnShift($query, string $shift)
+    {
+        return $query->where('shift', $shift);
+    }
+
+    /**
+     * Scope: filter operator yang sedang bertugas di ruangan tertentu.
+     * Contoh: Operator::inRoom($roomId)->get();
+     */
+    public function scopeInRoom($query, int $roomId)
+    {
+        return $query->where('room_id', $roomId);
+    }
+}

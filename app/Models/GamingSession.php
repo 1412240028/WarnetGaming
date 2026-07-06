@@ -84,5 +84,22 @@ class GamingSession extends Model
     {
         return $this->belongsToMany(Game::class, 'session_games', 'gaming_session_id', 'game_id')->withTimestamps();
     }
-}
 
+    /**
+     * Scope: hanya sesi yang statusnya masih berjalan (belum checkout).
+     * Contoh: GamingSession::active()->get();
+     */
+    public function scopeActive($query)
+    {
+        return $query->whereIn('status', ['active', 'started']);
+    }
+
+    /**
+     * Scope: hanya sesi yang sudah selesai (sudah checkout).
+     * Contoh: GamingSession::finished()->get();
+     */
+    public function scopeFinished($query)
+    {
+        return $query->whereIn('status', ['finished', 'ended']);
+    }
+}

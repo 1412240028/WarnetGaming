@@ -12,11 +12,11 @@ class OperatorController extends Controller
         $query = \App\Models\Operator::query();
 
         if ($request->filled('room_id')) {
-            $query->where('room_id', $request->integer('room_id'));
+            $query->inRoom($request->integer('room_id'));
         }
 
         if ($request->filled('shift')) {
-            $query->where('shift', $request->string('shift'));
+            $query->onShift($request->string('shift'));
         }
 
         return response()->json($query->paginate(10));
@@ -59,4 +59,3 @@ class OperatorController extends Controller
         return response()->json(['message' => 'Operator berhasil dihapus']);
     }
 }
-

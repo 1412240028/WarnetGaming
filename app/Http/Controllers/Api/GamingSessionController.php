@@ -17,6 +17,13 @@ class GamingSessionController extends Controller
             $query->where('status', $request->string('status'));
         }
 
+        // Filter cepat pakai scope: /api/gaming-sessions?only=active atau ?only=finished
+        if ($request->input('only') === 'active') {
+            $query->active();
+        } elseif ($request->input('only') === 'finished') {
+            $query->finished();
+        }
+
         if ($request->filled('room_id')) {
             $query->where('room_id', $request->integer('room_id'));
         }
@@ -62,4 +69,3 @@ class GamingSessionController extends Controller
         return response()->json(['message' => 'Gaming session berhasil dihapus']);
     }
 }
-
