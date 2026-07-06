@@ -14,12 +14,19 @@ scripts:
   - type: afterResponse
     language: text/javascript
     code: |-
+      // Auto-save token from /login response
+      // Supports both { token: "..." } and nested { data: { token: "..." } }
       const jsonData = pm.response.json();
-      const token = jsonData.token || (jsonData.data && jsonData.data.token);
+      const token = jsonData?.token ?? jsonData?.data?.token;
+
       if (token) {
-          pm.environment.set('token', token);
-          console.log('Token saved to environment variable token');
+        pm.environment.set('token', token);
+        console.log('Token saved to environment variable: token');
+
+        // Optional: also store a timestamp for debugging/autosave verification
+        pm.environment.set('token_saved_at', new Date().toISOString());
       } else {
-          console.warn('No token found in response');
+        console.warn('No token found in /login response');
       }
 order: 1000
+
