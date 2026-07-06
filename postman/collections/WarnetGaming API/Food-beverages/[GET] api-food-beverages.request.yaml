@@ -1,0 +1,11 @@
+$kind: http-request
+name: "[GET] api/food-beverages"
+url: "{{base_url}}/food-beverages"
+method: GET
+headers:
+  Accept: application/json
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 1000

@@ -1,0 +1,7 @@
+$kind: http-request
+name: "[GET] api/operators"
+url: "{{base_url}}/operators"
+method: GET
+headers:
+  Accept: application/json
+order: 1000

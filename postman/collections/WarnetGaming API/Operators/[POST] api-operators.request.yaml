@@ -1,0 +1,13 @@
+$kind: http-request
+name: "[POST] api/operators"
+url: "{{base_url}}/operators"
+method: POST
+headers:
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+        
+    }
+order: 2000

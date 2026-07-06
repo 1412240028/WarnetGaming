@@ -1,0 +1,7 @@
+$kind: http-request
+name: "[DELETE] api/operators/{operator}"
+url: "{{base_url}}/operators/{operator}"
+method: DELETE
+headers:
+  Accept: application/json
+order: 5000

@@ -1,0 +1,13 @@
+$kind: http-request
+name: "[PUT] api/pelanggans/{pelanggan}"
+url: "{{base_url}}/pelanggans/{pelanggan}"
+method: PUT
+headers:
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+        
+    }
+order: 4000

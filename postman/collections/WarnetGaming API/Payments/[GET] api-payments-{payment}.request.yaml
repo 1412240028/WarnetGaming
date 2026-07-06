@@ -1,0 +1,7 @@
+$kind: http-request
+name: "[GET] api/payments/{payment}"
+url: "{{base_url}}/payments/{payment}"
+method: GET
+headers:
+  Accept: application/json
+order: 3000

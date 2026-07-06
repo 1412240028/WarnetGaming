@@ -1,0 +1,7 @@
+$kind: http-request
+name: "[GET] api/memberships"
+url: "{{base_url}}/memberships"
+method: GET
+headers:
+  Accept: application/json
+order: 1000

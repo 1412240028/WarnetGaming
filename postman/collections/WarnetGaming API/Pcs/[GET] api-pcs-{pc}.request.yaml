@@ -1,0 +1,7 @@
+$kind: http-request
+name: "[GET] api/pcs/{pc}"
+url: "{{base_url}}/pcs/{pc}"
+method: GET
+headers:
+  Accept: application/json
+order: 3000

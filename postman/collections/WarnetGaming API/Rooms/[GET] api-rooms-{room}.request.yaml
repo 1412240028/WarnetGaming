@@ -1,0 +1,7 @@
+$kind: http-request
+name: "[GET] api/rooms/{room}"
+url: "{{base_url}}/rooms/{room}"
+method: GET
+headers:
+  Accept: application/json
+order: 3000

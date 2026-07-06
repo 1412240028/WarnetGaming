@@ -1,0 +1,13 @@
+$kind: http-request
+name: "[POST] api/pelanggans"
+url: "{{base_url}}/pelanggans"
+method: POST
+headers:
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+        
+    }
+order: 2000

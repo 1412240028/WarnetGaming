@@ -1,0 +1,7 @@
+$kind: http-request
+name: "[DELETE] api/games/{game}"
+url: "{{base_url}}/games/{game}"
+method: DELETE
+headers:
+  Accept: application/json
+order: 5000

@@ -1,0 +1,11 @@
+$kind: http-request
+name: "[GET] api/gaming-sessions"
+url: "{{base_url}}/gaming-sessions"
+method: GET
+headers:
+  Accept: application/json
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 1000

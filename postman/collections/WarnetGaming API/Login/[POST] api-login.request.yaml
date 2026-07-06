@@ -1,0 +1,13 @@
+$kind: http-request
+name: "[POST] api/login"
+url: "{{base_url}}/login"
+method: POST
+headers:
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+        
+    }
+order: 1000

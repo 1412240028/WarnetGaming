@@ -1,0 +1,17 @@
+$kind: http-request
+name: "[PUT] api/food-orders/{foodOrder}/status"
+url: "{{base_url}}/food-orders/{foodOrder}/status"
+method: PUT
+headers:
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+        
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 4000

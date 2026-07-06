@@ -1,0 +1,13 @@
+$kind: http-request
+name: "[PUT] api/pcs/{pc}"
+url: "{{base_url}}/pcs/{pc}"
+method: PUT
+headers:
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+        
+    }
+order: 4000

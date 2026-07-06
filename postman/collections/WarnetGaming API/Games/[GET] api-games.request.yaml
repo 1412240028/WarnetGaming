@@ -1,0 +1,7 @@
+$kind: http-request
+name: "[GET] api/games"
+url: "{{base_url}}/games"
+method: GET
+headers:
+  Accept: application/json
+order: 1000

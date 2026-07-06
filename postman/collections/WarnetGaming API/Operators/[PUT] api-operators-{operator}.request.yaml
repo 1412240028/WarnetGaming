@@ -1,0 +1,13 @@
+$kind: http-request
+name: "[PUT] api/operators/{operator}"
+url: "{{base_url}}/operators/{operator}"
+method: PUT
+headers:
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+        
+    }
+order: 4000

@@ -1,0 +1,17 @@
+$kind: http-request
+name: "[POST] api/food-orders"
+url: "{{base_url}}/food-orders"
+method: POST
+headers:
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+        
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 2000
