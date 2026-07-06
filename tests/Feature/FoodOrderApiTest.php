@@ -31,9 +31,12 @@ class FoodOrderApiTest extends TestCase
         
         $this->user = User::factory()->create();
         $this->pelanggan = Pelanggan::create(['user_id' => $this->user->id, 'status' => 'active']);
-        $this->operator = Operator::create(['nama' => 'Test', 'shift' => 'pagi']);
-        $this->room = Room::create(['nama_room' => 'VIP', 'tipe' => 'VIP']);
-        $this->pc = Pc::create(['nomor_pc' => 1, 'status' => 'tersedia', 'room_id' => $this->room->id]);
+        $this->room = Room::create(['name' => 'VIP', 'type' => 'VIP']);
+        
+        $operatorUser = User::factory()->create(['role' => 'operator']);
+        $this->operator = Operator::create(['user_id' => $operatorUser->id, 'room_id' => $this->room->id, 'shift' => 'pagi']);
+        
+        $this->pc = Pc::create(['code' => 'PC-01', 'status' => 'tersedia', 'room_id' => $this->room->id]);
         
         $this->session = GamingSession::create([
             'pelanggan_id' => $this->pelanggan->id,

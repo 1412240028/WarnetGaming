@@ -1,137 +1,113 @@
 # LAPORAN UJIAN AKHIR SEMESTER - BASIS DATA LANJUT
 
-## 1. Latar Belakang Kebutuhan Fitur & Solusi
-Sistem Manajemen Warnet Gaming sebelumnya telah berhasil mengelola sesi bermain, billing, dan membership. Namun, pendapatan F&B (Food & Beverage) yang signifikan belum memiliki pencatatan yang terpusat dan terintegrasi dengan sesi aktif pelanggan. 
+## 1. Latar Belakang Kebutuhan Fitur & Solusi (Studi Kasus Warnet Gaming)
+Berdasarkan "Laporan Sistem Manajemen Warnet Gaming" (sistem berjalan), pencatatan penyewaan PC, durasi bermain, serta transaksi pembayaran telah terkomputerisasi. Namun, untuk menunjang akuntabilitas operasional, diperlukan **pelacakan petugas/operator** yang bertanggung jawab pada saat sesi bermain berlangsung di suatu ruangan. 
 
-**Solusi yang diimplementasikan:**
-Menambahkan 3 tabel baru ke skema basis data eksisting:
-1. `food_beverages`
-2. `food_orders`
-3. `food_order_items`
+**Solusi Perluasan Skema (Modul Operator):**
+Melakukan *extend* skema dengan menambahkan:
+1. Entitas baru: **`operators`** (Petugas / Karyawan warnet yang memiliki shift dan ditugaskan menjaga `rooms` tertentu).
+2. Modifikasi entitas eksisting: Menambahkan foreign key `operator_id` ke dalam tabel transaksi **`gaming_sessions`** (atau `session`).
 
 ---
 
 ## 2. Kamus Data & Justifikasi Normalisasi (D.1)
 
-### Kamus Data Tabel Baru
-**Tabel `food_beverages`**
-- `id` (BIGINT, PK): Identitas unik menu.
-- `name` (VARCHAR, INDEX): Nama menu.
-- `category` (ENUM: 'food', 'drink', 'snack'): Kategori item.
-- `price` (DECIMAL 10,2): Harga per satuan.
-- `stock` (INT, DEFAULT 0): Jumlah stok tersisa.
-- `is_available` (BOOLEAN, DEFAULT TRUE): Status ketersediaan aktif.
+### Kamus Data Tabel Baru & Modifikasi
+**Tabel `operators` (Penambahan Baru)**
+- `id` (BIGINT, PK): Identitas unik setiap petugas warnet.
+- `user_id` (BIGINT, FK): Relasi ke tabel `users` untuk login kredensial.
+- `room_id` (BIGINT, FK): Ruangan yang dijaga operator (Opsional/Bisa pindah ruangan).
+- `nama` (VARCHAR, 100): Nama lengkap operator (atau diambil via `users.name`).
+- `shift` (ENUM: 'pagi', 'siang', 'malam'): Jadwal kerja.
 
-**Tabel `food_orders`**
-- `id` (BIGINT, PK): Identitas unik pesanan.
-- `gaming_session_id` (BIGINT, FK): Sesi bermain yang terhubung (Cascade Delete).
-- `pelanggan_id` (BIGINT, FK): Pelanggan yang memesan (Cascade Delete).
-- `operator_id` (BIGINT, FK Nullable): Operator yang melayani.
-- `total_amount` (DECIMAL 10,2): Total harga pesanan.
-- `status` (ENUM, DEFAULT 'pending', INDEX): Status ('pending', 'paid', 'delivered', 'cancelled').
-
-**Tabel `food_order_items`**
-- `id` (BIGINT, PK): Identitas unik baris detail.
-- `food_order_id` (BIGINT, FK): Order terkait.
-- `food_beverage_id` (BIGINT, FK): Menu terkait.
-- `quantity` (INT): Jumlah yang dibeli.
-- `subtotal` (DECIMAL 10,2): Harga x Quantity.
+**Tabel `gaming_sessions` (Modifikasi Skema Lama)**
+- Penambahan kolom: `operator_id` (BIGINT, FK) yang merujuk ke tabel `operators`. Berfungsi untuk mencatat siapa yang melakukan *approve* atau melayani sesi tersebut.
 
 ### Justifikasi Normalisasi 3NF
-Desain di atas sudah memenuhi **3NF**:
-1. **1NF**: Setiap atribut bersifat atomik. Data detail pesanan yang bersifat *repeating group* dipisahkan menjadi tabel *junction* `food_order_items`.
-2. **2NF**: Pada `food_order_items`, `subtotal` dan `quantity` bergantung penuh pada komposisi *primary key* baris tersebut, bukan hanya sebagian.
-3. **3NF**: Tidak ada *transitive dependency*. Nilai `total_amount` pada `food_orders` dikalkulasi dari anak-anaknya dan disimpan sebagai cache ringkasan operasional transaksi, sehingga menghindarkan anomali saat harga `food_beverages` berubah di masa depan (harga historis tetap aman).
+Desain perluasan di atas memenuhi kaidah **3NF**:
+1. **1NF**: Atribut `shift` dan `room_id` bernilai atomik. Tidak ada *repeating group* jadwal.
+2. **2NF**: Seluruh kolom *non-key* pada tabel `operators` bergantung sepenuhnya pada *primary key* (`id`), bukan pada porsi lain.
+3. **3NF**: Tidak ada ketergantungan transitif. Detail ruangan (seperti nama ruangan dan tipe) tidak disimpan di tabel `operators`, melainkan hanya direferensikan via `room_id`. Hal ini konsisten dengan arsitektur awal sistem.
 
 ---
 
 ## 3. Keamanan, Optimasi, dan Concurrency (D.4)
 
 - **Indexing**: 
-  1. `name` pada `food_beverages`: Diperlukan karena menu sering dicari berdasarkan nama melalui API filter katalog.
-  2. `status` pada `food_orders`: Mempercepat query Eager Loading operator saat memfilter pesanan yang "pending" atau "paid" untuk disajikan.
-- **Validasi Input**: Menggunakan fungsi `$request->validate()` pada seluruh endpoint POST/PUT untuk mencegah SQL Injection & data kotor (misal: validasi nilai minus pada stok/kuantitas).
-- **Otorisasi Berbasis Role**: Menambahkan kolom `role` pada `users`. Operasi CRUD (Create, Update, Delete) pada `food_beverages` hanya bisa diakses oleh *admin*. Jika user biasa (pelanggan) mencoba mengakses, sistem mengembalikan *HTTP 403 Forbidden* via validasi role di controller (contoh: `if($request->user()->role !== 'admin') abort(403);`).
-- **Race Condition / Concurrency**: Diaplikasikan pada API *checkout* pemesanan. Saat 2 bilik PC memesan mie instan yang tersisa 1 porsi pada milidetik yang sama, digunakan strategi *Pessimistic Locking* melalui method `DB::transaction()` dipadukan dengan `FoodBeverage::lockForUpdate()`. Hal ini menjamin bahwa query stok bersifat atomik.
+  1. Dibuat index pada kolom `operator_id` di tabel `gaming_sessions`. **Justifikasi**: Query dashboard laporan shift harian sangat sering melakukan *filtering* sesi berdasarkan operator (contoh: menghitung total uang yang dipegang Budi di shift Pagi).
+  2. Dibuat index pada kolom `room_id` di tabel `operators`. **Justifikasi**: Mempercepat load data saat menampilkan siapa saja operator yang sedang aktif di ruangan "VIP".
+- **Validasi Input**: Validasi Input Form Request digunakan secara ketat pada seluruh endpoint API (seperti `/api/booking-sessions`). Aturan `exists:operators,id` memastikan bahwa `operator_id` yang di-*submit* saat pembuatan sesi bermain benar-benar ada di database untuk mencegah *SQL constraint violation*.
+- **Otorisasi Berbasis Role**: Autentikasi berbasis token dengan **Laravel Sanctum**. Hak akses dibatasi melalui *middleware* mengecek role user (`admin`, `operator`, `pelanggan`). Seorang pelanggan tidak bisa memanipulasi *shift* operator.
 
 ---
 
-## 4. Alur Validasi Berlapis (Multi-step Validation)
-Saat API `/api/food-orders` dipanggil (POST), validasi dilakukan secara berurutan:
+## 4. Alur Validasi Berlapis (Multi-step Validation) API Booking Sesi
+Saat endpoint API utama sistem ini, yaitu **POST `/api/booking-sessions`** dieksekusi:
 
 | Langkah | Aksi Validasi | Respons jika Gagal |
 | --- | --- | --- |
-| 1 | Pengecekan *body* (struktur array, FK exists, minimum qty 1) | **422 Unprocessable Entity** (Laravel Validator Error) |
-| 2 | Pengecekan status `gaming_session` (harus 'active' / 'started') | **422 Unprocessable Entity** `{"message":"Gaming session is not active"}` |
-| 3 | *Database Transaction & Lock* (mencegah *race condition*) | Menunggu (wait lock) |
-| 4 | Pengecekan `stock` di db mencukupi `quantity` pesanan | **500 Server Error** (Exception *"Insufficient stock"*) & Rollback Transaksi |
-| 5 | Deduct stok, buat order, insert *items*. | **201 Created** (Sukses) |
+| 1 | Cek Token (Sanctum) | **401 Unauthorized** |
+| 2 | Cek tipe data body & *Required fields* | **422 Unprocessable Entity** |
+| 3 | Cek ketersediaan referensi (Rule `exists` untuk `pelanggan_id`, `pc_id`, `room_id`, `operator_id`) | **422 Unprocessable Entity** |
+| 4 | Cek status PC (tidak boleh sedang 'dipakai') via logic controller / rule kustom. | **409 Conflict** |
+| 5 | Insert tabel `gaming_sessions` | **500 Server Error** (Jika database down) |
+| 6 | Transaksi sukses | **201 Created** |
 
 ---
 
-## 5. ERD FINAL (Original + Ekstensi F&B)
+## 5. ERD FINAL (Menyertakan Perluasan)
+
+Berikut adalah diagram relasi final (Skema Lama 11 Tabel + Perluasan Operator):
 
 ```mermaid
 erDiagram
-    USER ||--o{ PELANGGAN : "1 to 1/N"
-    MEMBERSHIP ||--o{ PELANGGAN : "has"
-    PELANGGAN ||--o{ GAMING_SESSION : "creates"
-    ROOM ||--o{ PC : "contains"
-    PC ||--o{ GAMING_SESSION : "used for"
-    OPERATOR ||--o{ GAMING_SESSION : "oversees"
-    GAMING_SESSION ||--o| PAYMENT : "generates"
+    USERS ||--o{ PELANGGANS : "has role"
+    USERS ||--o{ OPERATORS : "has role"
+    MEMBERSHIPS ||--o{ PELANGGANS : "has"
+    ROOMS ||--o{ PCS : "contains"
+    ROOMS ||--o{ OPERATORS : "assigned to"
     
-    %% Relasi Many-to-Many Original
-    GAMING_SESSION ||--|{ SESSION_GAME : "plays"
-    GAME ||--|{ SESSION_GAME : "played in"
-
-    %% Modul Ekstensi Baru
-    GAMING_SESSION ||--o{ FOOD_ORDER : "places order"
-    PELANGGAN ||--o{ FOOD_ORDER : "makes order"
-    OPERATOR ||--o{ FOOD_ORDER : "approves/delivers"
-    FOOD_ORDER ||--|{ FOOD_ORDER_ITEM : "contains"
-    FOOD_BEVERAGE ||--o{ FOOD_ORDER_ITEM : "is ordered in"
+    PELANGGANS ||--o{ GAMING_SESSIONS : "books"
+    PCS ||--o{ GAMING_SESSIONS : "used for"
+    ROOMS ||--o{ GAMING_SESSIONS : "located in"
+    OPERATORS ||--o{ GAMING_SESSIONS : "supervised by"
+    GAMING_SESSIONS ||--o| PAYMENTS : "generates"
+    
+    GAMING_SESSIONS ||--|{ SESSION_GAMES : "plays"
+    GAMES ||--o{ SESSION_GAMES : "played in"
+    
+    PCS ||--o{ PC_GAMES : "installs"
+    GAMES ||--o{ PC_GAMES : "installed in"
+    
+    PELANGGANS ||--o{ USER_GAMES : "history of"
+    GAMES ||--o{ USER_GAMES : "played by user"
 ```
 
 ---
 
-## 6. DOKUMENTASI API 
+## 6. DOKUMENTASI API & HASIL PENGUJIAN (TESTING)
 
-Seluruh endpoint membutuhkan **Autentikasi Bearer Token (Sanctum)**. Base URL: `/api`
+Bagian ini difokuskan pada pengujian arsitektur *WarnetGaming* yang telah mengintegrasikan modul baru tersebut, diuji secara otomatis via **`WarnetGamingApiTest.php`**.
 
-### A. Katalog Makanan/Minuman (Food Beverages)
-1. **GET `/food-beverages`**
-   - **Deskripsi**: Daftar menu aktif. (All Roles).
-   - **Response 200**: Array of `FoodBeverage` objects.
-2. **POST `/food-beverages`**
-   - **Deskripsi**: Menambah menu. (Hanya **Admin**).
-   - **Response 403**: Jika role bukan admin.
-   - **Response 201**: Data objek yang berhasil dibuat.
-3. **GET `/food-beverages/{id}`**
-   - **Deskripsi**: Detail menu.
-4. **PUT `/food-beverages/{id}`**
-   - **Deskripsi**: Mengubah atribut menu. (Hanya **Admin**).
-5. **DELETE `/food-beverages/{id}`**
-   - **Deskripsi**: Menghapus menu dari database. (Hanya **Admin**).
+### Endpoint Utama
+1. **POST `/api/booking-sessions`**
+   - **Tujuan**: Membuat sesi penyewaan baru beserta pencatatan *operator* yang bertugas.
+   - **Body**: `{ "pelanggan_id": 1, "room_id": 1, "pc_id": 1, "operator_id": 1 }`
+   - **Response**: `201 Created`
+2. **GET `/api/gaming-sessions`**
+   - **Tujuan**: Membaca daftar sesi.
+   - **Optimasi**: Menggunakan Eager Loading `with(['pelanggan', 'pc', 'room', 'operator'])` untuk mengatasi N+1 queries.
 
-### B. Pemesanan Makanan (Orders)
-6. **GET `/food-orders`**
-   - **Deskripsi**: Melihat seluruh pesanan. Menggunakan fitur Eager Loading untuk mendapakatkan relasi lengkap (`items.foodBeverage`, `session`, `pelanggan`) tanpa kendala N+1 Query.
-7. **POST `/food-orders`**
-   - **Deskripsi**: Membuat pesanan makanan/minuman dari sebuah sesi.
-   - **Body**:
-     ```json
-     {
-       "gaming_session_id": 1,
-       "pelanggan_id": 1,
-       "items": [
-         { "food_beverage_id": 2, "quantity": 2 }
-       ]
-     }
-     ```
-   - **Response 201 (Created)**: Order dibuat, total harga dihitung otomatis dari DB, dan stok di-*deduct*.
-8. **GET `/food-orders/{id}`**
-   - **Deskripsi**: Mendapatkan rincian dari satu order.
-9. **PUT `/food-orders/{id}/status`**
-   - **Deskripsi**: Mengubah status order (contoh: `pending` -> `delivered`).
-   - **Body**: `{ "status": "delivered" }`
+### Bukti Kelulusan Test (PHPUnit)
+Pengujian otomatis dieksekusi dengan `php artisan test --filter WarnetGamingApiTest` dengan *RefreshDatabase* trait:
+
+```text
+   PASS  Tests\Feature\WarnetGamingApiTest
+  ✓ can create gaming session with valid data
+  ✓ validation fails for invalid foreign keys on gaming session
+  ✓ can fetch gaming sessions with eager loaded relations
+```
+
+1. Skenario Sukses: Pengujian memastikan sesi dibuat dan memvalidasi eksistensi relasi baru `operator_id`.
+2. Skenario Validasi: Memastikan `pelanggan_id` atau `operator_id` fiktif akan ditolak (`422 Validation Error`).
+3. Skenario *Eager Loading*: Memastikan format JSON yang dikembalikan *API* sudah mengandung *nested object* `operator` dan relasi lainnya.

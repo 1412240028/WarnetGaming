@@ -15,7 +15,10 @@ class WarnetGamingApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected User $user;
+    protected User $admin;
+    protected User $operatorUser;
+    protected User $pelangganUser;
+    
     protected Pelanggan $pelanggan;
     protected Operator $operator;
     protected Room $room;
@@ -25,14 +28,54 @@ class WarnetGamingApiTest extends TestCase
     {
         parent::setUp();
         
-        $this->user = User::factory()->create(['role' => 'pelanggan']);
-        $this->pelanggan = Pelanggan::create(['user_id' => $this->user->id, 'status' => 'active']);
-        $this->operator = Operator::create(['nama' => 'Budi', 'shift' => 'pagi']);
-        $this->room = Room::create(['nama_room' => 'Reguler', 'tipe' => 'reguler']);
-        $this->pc = Pc::create(['nomor_pc' => 1, 'status' => 'tersedia', 'room_id' => $this->room->id]);
+        // Create 3 different roles
+        $this->admin = User::factory()->create(['role' => 'admin']);
+        $this->operatorUser = User::factory()->create(['role' => 'operator']);
+        $this->pelangganUser = User::factory()->create(['role' => 'pelanggan']);
+        
+        // Setup initial relations
+        $this->pelanggan = Pelanggan::create(['user_id' => $this->pelangganUser->id, 'status' => 'active']);
+        $this->room = Room::create(['name' => 'Reguler', 'type' => 'reguler']);
+        $this->operator = Operator::create(['user_id' => $this->operatorUser->id, 'room_id' => $this->room->id, 'shift' => 'pagi']);
+        $this->pc = Pc::create(['code' => 'PC-01', 'status' => 'tersedia', 'room_id' => $this->room->id]);
     }
 
-    public function test_can_create_gaming_session_with_valid_data()
+    // ---------------------------------------------------------
+    // ROLE: ADMIN SCENARIOS
+    // ---------------------------------------------------------
+    public function test_admin_can_create_room()
+    {
+        $payload = [
+            'name' => 'VVIP Room',
+            'type' => 'VIP',
+        ];
+
+        $response = $this->actingAs($this->admin, 'sanctum')->postJson('/api/rooms', $payload);
+
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('rooms', [
+            'name' => 'VVIP Room',
+            'type' => 'VIP'
+        ]);
+    }
+
+    // ---------------------------------------------------------
+    // ROLE: PELANGGAN SCENARIOS
+    // ---------------------------------------------------------
+    public function test_pelanggan_cannot_create_room()
+    {
+        $payload = [
+            'name' => 'Hacker Room',
+            'type' => 'Esport',
+        ];
+
+        // Pelanggan trying to create a room should be forbidden (403)
+        $response = $this->actingAs($this->pelangganUser, 'sanctum')->postJson('/api/rooms', $payload);
+
+        $response->assertStatus(403);
+    }
+
+    public function test_pelanggan_can_create_gaming_session_with_valid_data()
     {
         $payload = [
             'pelanggan_id' => $this->pelanggan->id,
@@ -41,7 +84,7 @@ class WarnetGamingApiTest extends TestCase
             'operator_id' => $this->operator->id,
         ];
 
-        $response = $this->actingAs($this->user, 'sanctum')->postJson('/api/gaming-sessions', $payload);
+        $response = $this->actingAs($this->pelangganUser, 'sanctum')->postJson('/api/booking-sessions', $payload);
 
         $response->assertStatus(201);
         $this->assertDatabaseHas('gaming_sessions', [
@@ -54,28 +97,32 @@ class WarnetGamingApiTest extends TestCase
     public function test_validation_fails_for_invalid_foreign_keys_on_gaming_session()
     {
         $payload = [
-            'pelanggan_id' => 9999, // Invalid
+            'pelanggan_id' => 9999, // Invalid / Fictional ID
             'room_id' => $this->room->id,
             'pc_id' => $this->pc->id,
             'operator_id' => $this->operator->id,
         ];
 
-        $response = $this->actingAs($this->user, 'sanctum')->postJson('/api/gaming-sessions', $payload);
+        $response = $this->actingAs($this->pelangganUser, 'sanctum')->postJson('/api/booking-sessions', $payload);
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['pelanggan_id']);
     }
 
-    public function test_can_fetch_gaming_sessions_with_eager_loaded_relations()
+    // ---------------------------------------------------------
+    // ROLE: OPERATOR SCENARIOS
+    // ---------------------------------------------------------
+    public function test_operator_can_fetch_gaming_sessions_with_eager_loaded_relations()
     {
-        // Setup initial session
-        $this->actingAs($this->user, 'sanctum')->postJson('/api/gaming-sessions', [
+        // Setup initial session via booking
+        $this->actingAs($this->pelangganUser, 'sanctum')->postJson('/api/booking-sessions', [
             'pelanggan_id' => $this->pelanggan->id,
             'room_id' => $this->room->id,
             'pc_id' => $this->pc->id,
             'operator_id' => $this->operator->id,
         ]);
 
-        $response = $this->actingAs($this->user, 'sanctum')->getJson('/api/gaming-sessions');
+        // Operator accesses the index to monitor sessions
+        $response = $this->actingAs($this->operatorUser, 'sanctum')->getJson('/api/gaming-sessions');
         $response->assertStatus(200);
 
         // Check if eager loaded relations are present in the response
@@ -84,11 +131,30 @@ class WarnetGamingApiTest extends TestCase
                 '*' => [
                     'id',
                     'pelanggan' => ['id', 'user_id'],
-                    'pc' => ['id', 'nomor_pc'],
-                    'room' => ['id', 'nama_room'],
-                    'operator' => ['id', 'nama']
+                    'pc' => ['id', 'code'],
+                    'room' => ['id', 'name'],
+                    'operator' => ['id', 'user_id'] // Ensure your resource/model matches these keys
                 ]
             ]
         ]);
+    }
+
+    // ---------------------------------------------------------
+    // UNAUTHENTICATED SCENARIOS
+    // ---------------------------------------------------------
+    public function test_unauthenticated_user_cannot_access_booking()
+    {
+        $payload = [
+            'pelanggan_id' => $this->pelanggan->id,
+            'room_id' => $this->room->id,
+            'pc_id' => $this->pc->id,
+            'operator_id' => $this->operator->id,
+        ];
+
+        // Access without token
+        $response = $this->postJson('/api/booking-sessions', $payload);
+        
+        // Sanctum will throw 401 Unauthorized
+        $response->assertStatus(401);
     }
 }

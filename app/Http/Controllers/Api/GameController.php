@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Game;
 use Illuminate\Http\Request;
 
 class GameController extends Controller
@@ -12,7 +13,7 @@ class GameController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Game::all());
     }
 
     /**
@@ -20,7 +21,13 @@ class GameController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $game = Game::create($validated);
+
+        return response()->json($game, 201);
     }
 
     /**
@@ -28,7 +35,8 @@ class GameController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $game = Game::findOrFail($id);
+        return response()->json($game);
     }
 
     /**
@@ -36,7 +44,15 @@ class GameController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $game = Game::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $game->update($validated);
+
+        return response()->json($game);
     }
 
     /**
@@ -44,6 +60,9 @@ class GameController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $game = Game::findOrFail($id);
+        $game->delete();
+
+        return response()->json(null, 204);
     }
 }

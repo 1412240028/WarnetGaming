@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\FoodBeverage;
+use App\Http\Requests\StoreFoodBeverageRequest;
+use App\Http\Requests\UpdateFoodBeverageRequest;
 use Illuminate\Http\Request;
 
 class FoodBeverageController extends Controller
@@ -14,21 +16,9 @@ class FoodBeverageController extends Controller
         return response()->json($items);
     }
 
-    public function store(Request $request)
+    public function store(StoreFoodBeverageRequest $request)
     {
-        if ($request->user() && $request->user()->role !== 'admin') {
-            abort(403, 'Unauthorized action.');
-        }
-
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'category' => 'required|in:food,drink,snack',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'is_available' => 'boolean',
-        ]);
-
-        $item = FoodBeverage::create($validated);
+        $item = FoodBeverage::create($request->validated());
         return response()->json($item, 201);
     }
 
@@ -37,21 +27,9 @@ class FoodBeverageController extends Controller
         return response()->json($foodBeverage);
     }
 
-    public function update(Request $request, FoodBeverage $foodBeverage)
+    public function update(UpdateFoodBeverageRequest $request, FoodBeverage $foodBeverage)
     {
-        if ($request->user() && $request->user()->role !== 'admin') {
-            abort(403, 'Unauthorized action.');
-        }
-
-        $validated = $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'category' => 'sometimes|in:food,drink,snack',
-            'price' => 'sometimes|numeric|min:0',
-            'stock' => 'sometimes|integer|min:0',
-            'is_available' => 'boolean',
-        ]);
-
-        $foodBeverage->update($validated);
+        $foodBeverage->update($request->validated());
         return response()->json($foodBeverage);
     }
 

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('membership_id')->constrained('memberships')->cascadeOnDelete();
+            $table->foreignId('membership_id')->nullable()->constrained('memberships')->cascadeOnDelete();
 
             $table->string('status')->default('active'); // opsional
             $table->timestamps();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pelanggan;
 use Illuminate\Http\Request;
 
 class PelangganController extends Controller
@@ -12,7 +13,7 @@ class PelangganController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Pelanggan::with(['user', 'membership'])->get());
     }
 
     /**
@@ -20,7 +21,15 @@ class PelangganController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'membership_id' => 'nullable|exists:memberships,id',
+            'status' => 'required|string|max:255',
+        ]);
+
+        $pelanggan = Pelanggan::create($validated);
+
+        return response()->json($pelanggan, 201);
     }
 
     /**
@@ -28,7 +37,8 @@ class PelangganController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $pelanggan = Pelanggan::with(['user', 'membership'])->findOrFail($id);
+        return response()->json($pelanggan);
     }
 
     /**
@@ -36,7 +46,17 @@ class PelangganController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $pelanggan = Pelanggan::findOrFail($id);
+
+        $validated = $request->validate([
+            'user_id' => 'sometimes|required|exists:users,id',
+            'membership_id' => 'nullable|exists:memberships,id',
+            'status' => 'sometimes|required|string|max:255',
+        ]);
+
+        $pelanggan->update($validated);
+
+        return response()->json($pelanggan);
     }
 
     /**
@@ -44,6 +64,9 @@ class PelangganController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $pelanggan = Pelanggan::findOrFail($id);
+        $pelanggan->delete();
+
+        return response()->json(null, 204);
     }
 }

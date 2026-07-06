@@ -14,14 +14,28 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::query()->firstOrCreate([
-            'email' => 'test@example.com',
+            'email' => 'admin@warnet.com',
         ], [
-            'name' => 'Test User',
+            'name' => 'Administrator',
             'password' => Hash::make('password'),
-            'email_verified_at' => now(),
+            'role' => 'admin',
         ]);
 
-        User::factory()->count(19)->create();
+        User::query()->firstOrCreate([
+            'email' => 'operator@warnet.com',
+        ], [
+            'name' => 'Operator Penjaga',
+            'password' => Hash::make('password'),
+            'role' => 'operator',
+        ]);
+
+        User::query()->firstOrCreate([
+            'email' => 'pelanggan@warnet.com',
+        ], [
+            'name' => 'Pelanggan Setia',
+            'password' => Hash::make('password'),
+            'role' => 'pelanggan',
+        ]);
     }
 }
 

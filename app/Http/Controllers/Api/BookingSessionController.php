@@ -11,12 +11,11 @@ class BookingSessionController extends Controller
 {
     public function store(Request $request)
     {
-        // Placeholder validation; will be replaced with FormRequest + layered validation.
         $validated = $request->validate([
-            'pelanggan_id' => 'required|integer',
-            'room_id' => 'required|integer',
-            'pc_id' => 'required|integer',
-            'operator_id' => 'required|integer',
+            'pelanggan_id' => 'required|exists:pelanggans,id',
+            'room_id' => 'required|exists:rooms,id',
+            'pc_id' => 'required|exists:pcs,id',
+            'operator_id' => 'required|exists:operators,id',
         ]);
 
 
@@ -34,7 +33,7 @@ class BookingSessionController extends Controller
 
         });
 
-        return response()->json(['message' => 'Booking berhasil', 'data' => $created], 201);
+        return response()->json($created, 201);
     }
 }
 

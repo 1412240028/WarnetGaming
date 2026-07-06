@@ -7,6 +7,8 @@ use App\Models\FoodOrder;
 use App\Models\FoodOrderItem;
 use App\Models\FoodBeverage;
 use App\Models\GamingSession;
+use App\Http\Requests\StoreFoodOrderRequest;
+use App\Http\Requests\UpdateFoodOrderStatusRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,15 +20,9 @@ class FoodOrderController extends Controller
         return response()->json($orders);
     }
 
-    public function store(Request $request)
+    public function store(StoreFoodOrderRequest $request)
     {
-        $validated = $request->validate([
-            'gaming_session_id' => 'required|exists:gaming_sessions,id',
-            'pelanggan_id' => 'required|exists:pelanggans,id',
-            'items' => 'required|array|min:1',
-            'items.*.food_beverage_id' => 'required|exists:food_beverages,id',
-            'items.*.quantity' => 'required|integer|min:1',
-        ]);
+        $validated = $request->validated();
 
         $session = GamingSession::findOrFail($validated['gaming_session_id']);
         if ($session->status !== 'active' && $session->status !== 'started') {
@@ -77,13 +73,9 @@ class FoodOrderController extends Controller
         return response()->json($foodOrder->load(['items.foodBeverage', 'session', 'pelanggan']));
     }
 
-    public function updateStatus(Request $request, FoodOrder $foodOrder)
+    public function updateStatus(UpdateFoodOrderStatusRequest $request, FoodOrder $foodOrder)
     {
-        $validated = $request->validate([
-            'status' => 'required|in:pending,paid,delivered,cancelled',
-        ]);
-
-        $foodOrder->update(['status' => $validated['status']]);
+        $foodOrder->update(['status' => $request->validated('status')]);
         return response()->json($foodOrder);
     }
 }
