@@ -23,34 +23,39 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
-    Route::apiResource('rooms', RoomController::class);
-    Route::apiResource('pcs', PcController::class);
-    Route::apiResource('operators', OperatorController::class);
-    Route::apiResource('memberships', MembershipController::class);
-    Route::apiResource('payments', PaymentController::class);
-    Route::apiResource('games', GameController::class);
-    Route::apiResource('pelanggans', PelangganController::class);
-
-    Route::post('/booking-sessions', [BookingSessionController::class, 'store']);
+    // Endpoint yang boleh diakses SEMUA role yang login
+    Route::apiResource('pcs', PcController::class)->only(['index', 'show']);
+    Route::apiResource('games', GameController::class)->only(['index', 'show']);
     Route::get('/gaming-sessions', [GamingSessionController::class, 'index']);
     Route::get('/gaming-sessions/{gamingSession}', [GamingSessionController::class, 'show']);
-    Route::delete('/gaming-sessions/{gamingSession}', [GamingSessionController::class, 'destroy']);
+    Route::get('/food-beverages', [\App\Http\Controllers\Api\FoodBeverageController::class, 'index']);
+    Route::get('/food-beverages/{foodBeverage}', [\App\Http\Controllers\Api\FoodBeverageController::class, 'show']);
+    Route::get('/food-orders', [\App\Http\Controllers\Api\FoodOrderController::class, 'index']);
+    Route::get('/food-orders/{foodOrder}', [\App\Http\Controllers\Api\FoodOrderController::class, 'show']);
 
+    // Endpoint khusus ADMIN
+    Route::middleware('role:admin')->group(function () {
+        Route::apiResource('rooms', RoomController::class)->except(['index', 'show']);
+        Route::apiResource('operators', OperatorController::class);
+        Route::apiResource('memberships', MembershipController::class);
+        Route::post('/food-beverages', [\App\Http\Controllers\Api\FoodBeverageController::class, 'store']);
+        Route::put('/food-beverages/{foodBeverage}', [\App\Http\Controllers\Api\FoodBeverageController::class, 'update']);
+        Route::delete('/food-beverages/{foodBeverage}', [\App\Http\Controllers\Api\FoodBeverageController::class, 'destroy']);
+    });
+
+    // Endpoint ADMIN + OPERATOR (operasional harian)
+    Route::middleware('role:admin,operator')->group(function () {
+        Route::put('/food-orders/{foodOrder}/status', [\App\Http\Controllers\Api\FoodOrderController::class, 'updateStatus']);
+        Route::delete('/gaming-sessions/{gamingSession}', [GamingSessionController::class, 'destroy']);
+    });
+
+    // Endpoint PELANGGAN (booking & transaksi milik sendiri)
+    Route::post('/booking-sessions', [BookingSessionController::class, 'store']);
+    Route::post('/food-orders', [\App\Http\Controllers\Api\FoodOrderController::class, 'store']);
     Route::get('/gaming-sessions/{gamingSessionId}/games', [SessionGameController::class, 'index']);
     Route::post('/gaming-sessions/{gamingSessionId}/games', [SessionGameController::class, 'store']);
-
-    // Food and Beverages endpoints (Extension Module)
-    Route::get('/food-beverages', [\App\Http\Controllers\Api\FoodBeverageController::class, 'index']);
-    Route::post('/food-beverages', [\App\Http\Controllers\Api\FoodBeverageController::class, 'store']);
-    Route::get('/food-beverages/{foodBeverage}', [\App\Http\Controllers\Api\FoodBeverageController::class, 'show']);
-    Route::put('/food-beverages/{foodBeverage}', [\App\Http\Controllers\Api\FoodBeverageController::class, 'update']);
-    Route::delete('/food-beverages/{foodBeverage}', [\App\Http\Controllers\Api\FoodBeverageController::class, 'destroy']);
-
-    Route::get('/food-orders', [\App\Http\Controllers\Api\FoodOrderController::class, 'index']);
-    Route::post('/food-orders', [\App\Http\Controllers\Api\FoodOrderController::class, 'store']);
-    Route::get('/food-orders/{foodOrder}', [\App\Http\Controllers\Api\FoodOrderController::class, 'show']);
-    Route::put('/food-orders/{foodOrder}/status', [\App\Http\Controllers\Api\FoodOrderController::class, 'updateStatus']);
 });
+
 
 
 

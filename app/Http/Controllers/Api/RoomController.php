@@ -22,11 +22,8 @@ class RoomController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->user() && $request->user()->role !== 'admin') {
-            abort(403, 'Unauthorized action. Only admin can create room.');
-        }
-
         $validated = $request->validate([
+
             'name' => 'required|string|max:50',
             'type' => 'nullable|string|max:30',
         ]);
@@ -47,11 +44,8 @@ class RoomController extends Controller
 
     public function update(Request $request, Room $room)
     {
-        if ($request->user() && $request->user()->role !== 'admin') {
-            abort(403, 'Unauthorized action. Only admin can update room.');
-        }
-
         $validated = $request->validate([
+
             'name' => 'sometimes|required|string|max:50',
             'type' => 'sometimes|nullable|string|max:30',
         ]);
@@ -65,11 +59,8 @@ class RoomController extends Controller
 
     public function destroy(Request $request, Room $room)
     {
-        if ($request->user() && $request->user()->role !== 'admin') {
-            abort(403, 'Unauthorized action. Only admin can delete room.');
-        }
-
         DB::transaction(function () use ($room) {
+
             $room->delete();
         });
 

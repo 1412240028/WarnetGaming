@@ -35,10 +35,6 @@ class FoodBeverageController extends Controller
 
     public function destroy(Request $request, FoodBeverage $foodBeverage)
     {
-        if ($request->user() && $request->user()->role !== 'admin') {
-            abort(403, 'Unauthorized action.');
-        }
-
         $foodBeverage->delete();
         return response()->json(null, 204);
     }
