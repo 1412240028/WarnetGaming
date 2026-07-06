@@ -165,7 +165,7 @@ Entity Relationship Diagram (ERD) merupakan gambaran hubungan antar tabel pada s
 
 Pada proyek ini, ERD dikembangkan dari sistem sebelumnya dengan menambahkan modul Operator dan Food & Beverage.
 
-Diagram ERD lengkap dapat dilihat pada lampiran menggunakan kode Mermaid berikut.
+Diagram ERD lengkap dari sistem ini dapat dilihat melalui ilustrasi kode Mermaid berikut:
 
 ```mermaid
     erDiagram
@@ -243,8 +243,6 @@ Diagram ERD lengkap dapat dilihat pada lampiran menggunakan kode Mermaid berikut
         FOOD_ORDERS ||--|{ FOOD_ORDER_ITEMS : "contains"
         FOOD_BEVERAGES ||--o{ FOOD_ORDER_ITEMS : "ordered_in"
 ```
-(Di bagian ini kita akan menggunakan diagram Mermaid yang sudah dibuat sebelumnya, sehingga tidak perlu digambar ulang.)
-
 Melalui ERD tersebut dapat diketahui beberapa hubungan utama, yaitu:
 
 1) Relasi User dan Operator
