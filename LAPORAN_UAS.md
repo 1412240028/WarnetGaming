@@ -167,6 +167,82 @@ Pada proyek ini, ERD dikembangkan dari sistem sebelumnya dengan menambahkan modu
 
 Diagram ERD lengkap dapat dilihat pada lampiran menggunakan kode Mermaid berikut.
 
+```mermaid
+    erDiagram
+        USERS {
+            bigint id PK
+            string name
+            string email
+            string password
+            string role
+        }
+        ROOMS {
+            bigint id PK
+            string name
+        }
+        OPERATORS {
+            bigint id PK
+            bigint user_id FK
+            bigint room_id FK
+            string shift
+        }
+        PCS {
+            bigint id PK
+            string code
+        }
+        PELANGGANS {
+            bigint id PK
+            string nama
+        }
+        GAMING_SESSIONS {
+            bigint id PK
+            bigint pelanggan_id FK
+            bigint operator_id FK
+            bigint pc_id FK
+            bigint room_id FK
+            datetime started_at
+            datetime ended_at
+            string status
+        }
+        FOOD_BEVERAGES {
+            bigint id PK
+            string name
+            string category
+            decimal price
+            int stock
+            boolean is_available
+        }
+        FOOD_ORDERS {
+            bigint id PK
+            bigint gaming_session_id FK
+            bigint pelanggan_id FK
+            bigint operator_id FK
+            decimal total_amount
+            string status
+        }
+        FOOD_ORDER_ITEMS {
+            bigint id PK
+            bigint food_order_id FK
+            bigint food_beverage_id FK
+            int quantity
+            decimal price
+            decimal subtotal
+        }
+    
+        USERS ||--o{ OPERATORS : "has"
+        ROOMS ||--o{ OPERATORS : "has"
+        ROOMS ||--o{ GAMING_SESSIONS : "has"
+        PCS ||--o{ GAMING_SESSIONS : "used_in"
+        PELANGGANS ||--o{ GAMING_SESSIONS : "books"
+        OPERATORS ||--o{ GAMING_SESSIONS : "handles"
+        
+        GAMING_SESSIONS ||--o{ FOOD_ORDERS : "makes"
+        PELANGGANS ||--o{ FOOD_ORDERS : "makes"
+        OPERATORS ||--o{ FOOD_ORDERS : "serves"
+        
+        FOOD_ORDERS ||--|{ FOOD_ORDER_ITEMS : "contains"
+        FOOD_BEVERAGES ||--o{ FOOD_ORDER_ITEMS : "ordered_in"
+```
 (Di bagian ini kita akan menggunakan diagram Mermaid yang sudah dibuat sebelumnya, sehingga tidak perlu digambar ulang.)
 
 Melalui ERD tersebut dapat diketahui beberapa hubungan utama, yaitu:
