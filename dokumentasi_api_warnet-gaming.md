@@ -84,6 +84,7 @@ Basis data *WarnetGaming* terdiri dari tabel-tabel utama yang saling terhubung:
 - `pelanggans`, `pcs`, `rooms`, `operators` (1:N) `gaming_sessions`
 - `gaming_sessions` (1:N) `session_games`
 - `gaming_sessions` (1:N) `food_orders`
+- `food_orders` (1:N) `food_order_items`
 - `food_beverages` (1:N) `food_order_items`
 - `gaming_sessions` (1:N) `payments`
 
@@ -137,9 +138,17 @@ Semua model menerapkan `SoftDeletes` untuk melindungi riwayat data.
 |---|---|---|---|
 | 1 | `User` | users | HasApiTokens, SoftDeletes |
 | 2 | `Pelanggan` | pelanggans | belongsTo User, belongsTo Membership |
-| 3 | `GamingSession`| gaming_sessions | belongsTo(Pelanggan, Pc, Room, Operator). Scopes: active(), finished() |
-| 4 | `Pc` | pcs | belongsTo Room, belongsToMany Game |
-| 5 | `FoodOrder` | food_orders | hasMany FoodOrderItem |
+| 3 | `Operator` | operators | belongsTo User. Scopes: onShift(), inRoom() |
+| 4 | `Membership` | memberships | hasMany Pelanggan |
+| 5 | `Room` | rooms | hasMany Pc, hasMany GamingSession |
+| 6 | `Pc` | pcs | belongsTo Room, belongsToMany Game |
+| 7 | `Game` | games | belongsToMany Pc |
+| 8 | `GamingSession`| gaming_sessions | belongsTo(Pelanggan, Pc, Room, Operator). Scopes: active(), finished() |
+| 9 | `SessionGame` | session_games | belongsTo GamingSession, belongsTo Game |
+| 10 | `FoodOrder` | food_orders | belongsTo GamingSession, hasMany FoodOrderItem |
+| 11 | `FoodOrderItem`| food_order_items| belongsTo FoodOrder, belongsTo FoodBeverage |
+| 12 | `FoodBeverage` | food_beverages | hasMany FoodOrderItem |
+| 13 | `Payment` | payments | belongsTo GamingSession |
 
 ### **3.2 Urutan Migrasi**
 Agar relasi *Foreign Key* tidak error, urutan migrasi adalah:
@@ -161,9 +170,12 @@ Agar relasi *Foreign Key* tidak error, urutan migrasi adalah:
 
 ### **4.2 Daftar Lengkap Endpoint API**
 
-**Modul Auth (Public)**
-- `POST /register` (Rate limit: 6/1)
-- `POST /login` (Rate limit: 6/1)
+**Modul Auth & Utilitas**
+- `GET /health` (Health check server)
+- `POST /register` (Public, Rate limit: 6/1)
+- `POST /login` (Public, Rate limit: 6/1)
+- `POST /logout` (Logout & invalidate token)
+- `GET /me` (Ambil data user yang sedang login)
 
 **Modul Master (Read-Only via API)**
 - `GET /rooms` & `GET /rooms/{id}`
