@@ -27,3 +27,16 @@ _ide_helper_models.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Database SQLite (jika menggunakan SQLite)
+/database/*.sqlite
+/database/*.sqlite3
+
+# Postman lokal
+.postman/
+
+# File generated / cache
+routes.json
+
+# File soal (tidak perlu diupload ke repo)
+Soal_UAS_BasisDataLanjut_TakeHome.pdf
