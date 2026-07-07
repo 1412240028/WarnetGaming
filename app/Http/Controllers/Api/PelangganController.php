@@ -15,7 +15,7 @@ class PelangganController extends Controller
      */
     public function index()
     {
-        return response()->json(Pelanggan::with(['user', 'membership'])->get());
+        return \App\Http\Resources\PelangganResource::collection(Pelanggan::with(['user', 'membership'])->get());
     }
 
     /**
@@ -27,7 +27,7 @@ class PelangganController extends Controller
 
         $pelanggan = Pelanggan::create($validated);
 
-        return response()->json($pelanggan, 201);
+        return (new \App\Http\Resources\PelangganResource($pelanggan))->response()->setStatusCode(201);
     }
 
     /**
@@ -36,7 +36,7 @@ class PelangganController extends Controller
     public function show(string $id)
     {
         $pelanggan = Pelanggan::with(['user', 'membership'])->findOrFail($id);
-        return response()->json($pelanggan);
+        return new \App\Http\Resources\PelangganResource($pelanggan);
     }
 
     /**
@@ -50,7 +50,7 @@ class PelangganController extends Controller
 
         $pelanggan->update($validated);
 
-        return response()->json($pelanggan);
+        return new \App\Http\Resources\PelangganResource($pelanggan);
     }
 
     /**

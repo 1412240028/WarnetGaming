@@ -1,7 +1,7 @@
 {
     "info": {
-        "name": "WarnetGaming API",
-        "description": "Auto-generated Postman collection for WarnetGaming",
+        "name": "WarnetGaming API (Advanced)",
+        "description": "Advanced Postman collection with auto-token script, path variables, and sample payloads.",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
     "item": [
@@ -33,958 +33,6 @@
             ]
         },
         {
-            "name": "Rooms",
-            "item": [
-                {
-                    "name": "[GET] api\/rooms",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/rooms",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "rooms"
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[POST] api\/rooms",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/rooms",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "rooms"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[GET] api\/rooms\/{room}",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/rooms\/{room}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "rooms",
-                                "{room}"
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[PUT] api\/rooms\/{room}",
-                    "request": {
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/rooms\/{room}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "rooms",
-                                "{room}"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[DELETE] api\/rooms\/{room}",
-                    "request": {
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/rooms\/{room}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "rooms",
-                                "{room}"
-                            ]
-                        }
-                    },
-                    "response": []
-                }
-            ]
-        },
-        {
-            "name": "Pcs",
-            "item": [
-                {
-                    "name": "[GET] api\/pcs",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/pcs",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pcs"
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[POST] api\/pcs",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/pcs",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pcs"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[GET] api\/pcs\/{pc}",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/pcs\/{pc}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pcs",
-                                "{pc}"
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[PUT] api\/pcs\/{pc}",
-                    "request": {
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/pcs\/{pc}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pcs",
-                                "{pc}"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[DELETE] api\/pcs\/{pc}",
-                    "request": {
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/pcs\/{pc}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pcs",
-                                "{pc}"
-                            ]
-                        }
-                    },
-                    "response": []
-                }
-            ]
-        },
-        {
-            "name": "Operators",
-            "item": [
-                {
-                    "name": "[GET] api\/operators",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/operators",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "operators"
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[POST] api\/operators",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/operators",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "operators"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[GET] api\/operators\/{operator}",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/operators\/{operator}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "operators",
-                                "{operator}"
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[PUT] api\/operators\/{operator}",
-                    "request": {
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/operators\/{operator}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "operators",
-                                "{operator}"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[DELETE] api\/operators\/{operator}",
-                    "request": {
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/operators\/{operator}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "operators",
-                                "{operator}"
-                            ]
-                        }
-                    },
-                    "response": []
-                }
-            ]
-        },
-        {
-            "name": "Memberships",
-            "item": [
-                {
-                    "name": "[GET] api\/memberships",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/memberships",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "memberships"
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[POST] api\/memberships",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/memberships",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "memberships"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[GET] api\/memberships\/{membership}",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/memberships\/{membership}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "memberships",
-                                "{membership}"
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[PUT] api\/memberships\/{membership}",
-                    "request": {
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/memberships\/{membership}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "memberships",
-                                "{membership}"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[DELETE] api\/memberships\/{membership}",
-                    "request": {
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/memberships\/{membership}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "memberships",
-                                "{membership}"
-                            ]
-                        }
-                    },
-                    "response": []
-                }
-            ]
-        },
-        {
-            "name": "Payments",
-            "item": [
-                {
-                    "name": "[GET] api\/payments",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/payments",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "payments"
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[POST] api\/payments",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/payments",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "payments"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[GET] api\/payments\/{payment}",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/payments\/{payment}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "payments",
-                                "{payment}"
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[PUT] api\/payments\/{payment}",
-                    "request": {
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/payments\/{payment}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "payments",
-                                "{payment}"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[DELETE] api\/payments\/{payment}",
-                    "request": {
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/payments\/{payment}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "payments",
-                                "{payment}"
-                            ]
-                        }
-                    },
-                    "response": []
-                }
-            ]
-        },
-        {
-            "name": "Games",
-            "item": [
-                {
-                    "name": "[GET] api\/games",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/games",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "games"
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[POST] api\/games",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/games",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "games"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[GET] api\/games\/{game}",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/games\/{game}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "games",
-                                "{game}"
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[PUT] api\/games\/{game}",
-                    "request": {
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/games\/{game}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "games",
-                                "{game}"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[DELETE] api\/games\/{game}",
-                    "request": {
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/games\/{game}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "games",
-                                "{game}"
-                            ]
-                        }
-                    },
-                    "response": []
-                }
-            ]
-        },
-        {
-            "name": "Pelanggans",
-            "item": [
-                {
-                    "name": "[GET] api\/pelanggans",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/pelanggans",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pelanggans"
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[POST] api\/pelanggans",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/pelanggans",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pelanggans"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[GET] api\/pelanggans\/{pelanggan}",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/pelanggans\/{pelanggan}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pelanggans",
-                                "{pelanggan}"
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[PUT] api\/pelanggans\/{pelanggan}",
-                    "request": {
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/pelanggans\/{pelanggan}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pelanggans",
-                                "{pelanggan}"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[DELETE] api\/pelanggans\/{pelanggan}",
-                    "request": {
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/pelanggans\/{pelanggan}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pelanggans",
-                                "{pelanggan}"
-                            ]
-                        }
-                    },
-                    "response": []
-                }
-            ]
-        },
-        {
             "name": "Register",
             "item": [
                 {
@@ -1008,7 +56,7 @@
                         },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \n}",
+                            "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -1044,7 +92,7 @@
                         },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \n}",
+                            "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -1052,7 +100,22 @@
                             }
                         }
                     },
-                    "response": []
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text\/javascript",
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData.token) {",
+                                    "    pm.collectionVariables.set(\"token\", jsonData.token);",
+                                    "    console.log(\"Token automatically set!\");",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
                 }
             ]
         },
@@ -1140,10 +203,81 @@
             ]
         },
         {
-            "name": "Booking-sessions",
+            "name": "Rooms",
             "item": [
                 {
-                    "name": "[POST] api\/booking-sessions",
+                    "name": "[GET] api\/rooms",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/rooms",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "rooms"
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[GET] api\/rooms\/{room}",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/rooms\/:room",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "rooms",
+                                ":room"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "room",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[POST] api\/rooms",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -1153,12 +287,12 @@
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/booking-sessions",
+                            "raw": "{{base_url}}\/rooms",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "booking-sessions"
+                                "rooms"
                             ]
                         },
                         "auth": {
@@ -1179,6 +313,245 @@
                                     "language": "json"
                                 }
                             }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[PUT] api\/rooms\/{room}",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/rooms\/:room",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "rooms",
+                                ":room"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "room",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[DELETE] api\/rooms\/{room}",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/rooms\/:room",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "rooms",
+                                ":room"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "room",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Pcs",
+            "item": [
+                {
+                    "name": "[GET] api\/pcs",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/pcs",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "pcs"
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[GET] api\/pcs\/{pc}",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/pcs\/:pc",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "pcs",
+                                ":pc"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "pc",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Games",
+            "item": [
+                {
+                    "name": "[GET] api\/games",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/games",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "games"
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[GET] api\/games\/{game}",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/games\/:game",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "games",
+                                ":game"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "game",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
                         }
                     },
                     "response": []
@@ -1231,13 +604,19 @@
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/gaming-sessions\/{gamingSession}",
+                            "raw": "{{base_url}}\/gaming-sessions\/:gamingSession",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
                                 "gaming-sessions",
-                                "{gamingSession}"
+                                ":gamingSession"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "gamingSession",
+                                    "value": "1"
+                                }
                             ]
                         },
                         "auth": {
@@ -1264,13 +643,19 @@
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/gaming-sessions\/{gamingSession}",
+                            "raw": "{{base_url}}\/gaming-sessions\/:gamingSession",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
                                 "gaming-sessions",
-                                "{gamingSession}"
+                                ":gamingSession"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "gamingSession",
+                                    "value": "1"
+                                }
                             ]
                         },
                         "auth": {
@@ -1297,14 +682,20 @@
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/gaming-sessions\/{gamingSessionId}\/games",
+                            "raw": "{{base_url}}\/gaming-sessions\/:gamingSessionId\/games",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
                                 "gaming-sessions",
-                                "{gamingSessionId}",
+                                ":gamingSessionId",
                                 "games"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "gamingSessionId",
+                                    "value": "1"
+                                }
                             ]
                         },
                         "auth": {
@@ -1331,14 +722,20 @@
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/gaming-sessions\/{gamingSessionId}\/games",
+                            "raw": "{{base_url}}\/gaming-sessions\/:gamingSessionId\/games",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
                                 "gaming-sessions",
-                                "{gamingSessionId}",
+                                ":gamingSessionId",
                                 "games"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "gamingSessionId",
+                                    "value": "1"
+                                }
                             ]
                         },
                         "auth": {
@@ -1353,7 +750,7 @@
                         },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \n}",
+                            "raw": "{\n    \"game_id\": 1,\n    \"notes\": \"Ranked match\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -1385,6 +782,45 @@
                             ],
                             "path": [
                                 "food-beverages"
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[GET] api\/food-beverages\/{food_beverage}",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/food-beverages\/:food_beverage",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "food-beverages",
+                                ":food_beverage"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "food_beverage",
+                                    "value": "1"
+                                }
                             ]
                         },
                         "auth": {
@@ -1442,39 +878,6 @@
                     "response": []
                 },
                 {
-                    "name": "[GET] api\/food-beverages\/{foodBeverage}",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/food-beverages\/{foodBeverage}",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "food-beverages",
-                                "{foodBeverage}"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
                     "name": "[PUT] api\/food-beverages\/{foodBeverage}",
                     "request": {
                         "method": "PUT",
@@ -1485,13 +888,19 @@
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/food-beverages\/{foodBeverage}",
+                            "raw": "{{base_url}}\/food-beverages\/:foodBeverage",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
                                 "food-beverages",
-                                "{foodBeverage}"
+                                ":foodBeverage"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "foodBeverage",
+                                    "value": "1"
+                                }
                             ]
                         },
                         "auth": {
@@ -1527,13 +936,19 @@
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/food-beverages\/{foodBeverage}",
+                            "raw": "{{base_url}}\/food-beverages\/:foodBeverage",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
                                 "food-beverages",
-                                "{foodBeverage}"
+                                ":foodBeverage"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "foodBeverage",
+                                    "value": "1"
+                                }
                             ]
                         },
                         "auth": {
@@ -1587,6 +1002,94 @@
                     "response": []
                 },
                 {
+                    "name": "[GET] api\/food-orders\/{food_order}",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/food-orders\/:food_order",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "food-orders",
+                                ":food_order"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "food_order",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[PUT] api\/food-orders\/{foodOrder}\/status",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/food-orders\/:foodOrder\/status",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "food-orders",
+                                ":foodOrder",
+                                "status"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "foodOrder",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"status\": \"paid\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
                     "name": "[POST] api\/food-orders",
                     "request": {
                         "method": "POST",
@@ -1617,7 +1120,7 @@
                         },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \n}",
+                            "raw": "{\n    \"gaming_session_id\": 1,\n    \"pelanggan_id\": 1,\n    \"items\": [\n        {\n            \"food_beverage_id\": 1,\n            \"quantity\": 2\n        }\n    ]\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -1626,9 +1129,14 @@
                         }
                     },
                     "response": []
-                },
+                }
+            ]
+        },
+        {
+            "name": "Operators",
+            "item": [
                 {
-                    "name": "[GET] api\/food-orders\/{foodOrder}",
+                    "name": "[GET] api\/operators",
                     "request": {
                         "method": "GET",
                         "header": [
@@ -1638,13 +1146,12 @@
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/food-orders\/{foodOrder}",
+                            "raw": "{{base_url}}\/operators",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "food-orders",
-                                "{foodOrder}"
+                                "operators"
                             ]
                         },
                         "auth": {
@@ -1661,9 +1168,9 @@
                     "response": []
                 },
                 {
-                    "name": "[PUT] api\/food-orders\/{foodOrder}\/status",
+                    "name": "[POST] api\/operators",
                     "request": {
-                        "method": "PUT",
+                        "method": "POST",
                         "header": [
                             {
                                 "key": "Accept",
@@ -1671,14 +1178,12 @@
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/food-orders\/{foodOrder}\/status",
+                            "raw": "{{base_url}}\/operators",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "food-orders",
-                                "{foodOrder}",
-                                "status"
+                                "operators"
                             ]
                         },
                         "auth": {
@@ -1694,6 +1199,790 @@
                         "body": {
                             "mode": "raw",
                             "raw": "{\n    \n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[GET] api\/operators\/{operator}",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/operators\/:operator",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "operators",
+                                ":operator"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "operator",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[PUT] api\/operators\/{operator}",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/operators\/:operator",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "operators",
+                                ":operator"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "operator",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[DELETE] api\/operators\/{operator}",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/operators\/:operator",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "operators",
+                                ":operator"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "operator",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Memberships",
+            "item": [
+                {
+                    "name": "[GET] api\/memberships",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/memberships",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "memberships"
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[POST] api\/memberships",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/memberships",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "memberships"
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[GET] api\/memberships\/{membership}",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/memberships\/:membership",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "memberships",
+                                ":membership"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "membership",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[PUT] api\/memberships\/{membership}",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/memberships\/:membership",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "memberships",
+                                ":membership"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "membership",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[DELETE] api\/memberships\/{membership}",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/memberships\/:membership",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "memberships",
+                                ":membership"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "membership",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Payments",
+            "item": [
+                {
+                    "name": "[GET] api\/payments",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/payments",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "payments"
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[POST] api\/payments",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/payments",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "payments"
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"gaming_session_id\": 1,\n    \"nominal\": 50000,\n    \"method\": \"cash\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[GET] api\/payments\/{payment}",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/payments\/:payment",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "payments",
+                                ":payment"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "payment",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[PUT] api\/payments\/{payment}",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/payments\/:payment",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "payments",
+                                ":payment"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "payment",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[DELETE] api\/payments\/{payment}",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/payments\/:payment",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "payments",
+                                ":payment"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "payment",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Pelanggans",
+            "item": [
+                {
+                    "name": "[GET] api\/pelanggans",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/pelanggans",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "pelanggans"
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[POST] api\/pelanggans",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/pelanggans",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "pelanggans"
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"user_id\": 1,\n    \"membership_id\": 1,\n    \"status\": \"active\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[GET] api\/pelanggans\/{pelanggan}",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/pelanggans\/:pelanggan",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "pelanggans",
+                                ":pelanggan"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "pelanggan",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[PUT] api\/pelanggans\/{pelanggan}",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/pelanggans\/:pelanggan",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "pelanggans",
+                                ":pelanggan"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "pelanggan",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[DELETE] api\/pelanggans\/{pelanggan}",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/pelanggans\/:pelanggan",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "pelanggans",
+                                ":pelanggan"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "pelanggan",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Booking-sessions",
+            "item": [
+                {
+                    "name": "[POST] api\/booking-sessions",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}\/booking-sessions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "booking-sessions"
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"pelanggan_id\": 1,\n    \"room_id\": 1,\n    \"pc_id\": 1,\n    \"operator_id\": 1\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"

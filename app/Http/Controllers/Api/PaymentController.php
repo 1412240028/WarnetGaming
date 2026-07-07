@@ -18,7 +18,7 @@ class PaymentController extends Controller
         }
 
 
-        return response()->json($query->paginate(10));
+        return \App\Http\Resources\PaymentResource::collection($query->paginate(10));
     }
 
     public function store(StorePaymentRequest $request)
@@ -28,12 +28,12 @@ class PaymentController extends Controller
 
         $payment = \App\Models\Payment::create($validated);
 
-        return response()->json(['message' => 'Payment berhasil dibuat', 'data' => $payment], 201);
+        return (new \App\Http\Resources\PaymentResource($payment))->additional(['message' => 'Payment berhasil dibuat'])->response()->setStatusCode(201);
     }
 
     public function show(\App\Models\Payment $payment)
     {
-        return response()->json($payment);
+        return new \App\Http\Resources\PaymentResource($payment);
     }
 
     public function update(UpdatePaymentRequest $request, \App\Models\Payment $payment)
@@ -43,7 +43,7 @@ class PaymentController extends Controller
 
         $payment->update($validated);
 
-        return response()->json(['message' => 'Payment berhasil diperbarui', 'data' => $payment]);
+        return (new \App\Http\Resources\PaymentResource($payment))->additional(['message' => 'Payment berhasil diperbarui']);
     }
 
     public function destroy(\App\Models\Payment $payment)

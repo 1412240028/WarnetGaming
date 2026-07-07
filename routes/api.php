@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
 
     // Endpoint yang boleh diakses SEMUA role yang login
+    Route::apiResource('rooms', RoomController::class)->only(['index', 'show']);
     Route::apiResource('pcs', PcController::class)->only(['index', 'show']);
     Route::apiResource('games', GameController::class)->only(['index', 'show']);
     Route::get('/gaming-sessions', [GamingSessionController::class, 'index']);
@@ -48,7 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/food-orders/{foodOrder}/status', [FoodOrderController::class, 'updateStatus']);
         Route::delete('/gaming-sessions/{gamingSession}', [GamingSessionController::class, 'destroy']);
         Route::apiResource('payments', PaymentController::class);
-        Route::apiResource('pelanggans', PelangganController::class)->only(['index', 'show', 'update']);
+        Route::apiResource('pelanggans', PelangganController::class);
     });
 
     // Endpoint PELANGGAN (booking & transaksi milik sendiri)

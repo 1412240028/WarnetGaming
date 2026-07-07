@@ -18,7 +18,7 @@ class FoodOrderController extends Controller
     public function index()
     {
         $orders = FoodOrder::with(['items.foodBeverage', 'session', 'pelanggan'])->get();
-        return response()->json($orders);
+        return \App\Http\Resources\FoodOrderResource::collection($orders);
     }
 
     public function store(StoreFoodOrderRequest $request)
@@ -71,17 +71,17 @@ class FoodOrderController extends Controller
             }
         });
 
-        return response()->json($order->load('items.foodBeverage'), 201);
+        return (new \App\Http\Resources\FoodOrderResource($order->load('items.foodBeverage')))->response()->setStatusCode(201);
     }
 
     public function show(FoodOrder $foodOrder)
     {
-        return response()->json($foodOrder->load(['items.foodBeverage', 'session', 'pelanggan']));
+        return new \App\Http\Resources\FoodOrderResource($foodOrder->load(['items.foodBeverage', 'session', 'pelanggan']));
     }
 
     public function updateStatus(UpdateFoodOrderStatusRequest $request, FoodOrder $foodOrder)
     {
         $foodOrder->update(['status' => $request->validated('status')]);
-        return response()->json($foodOrder);
+        return new \App\Http\Resources\FoodOrderResource($foodOrder);
     }
 }

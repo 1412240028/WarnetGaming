@@ -34,29 +34,15 @@ class GamingSessionController extends Controller
             $perPage = 10;
         }
 
-        return response()->json($query->paginate($perPage));
+        return \App\Http\Resources\GamingSessionResource::collection($query->paginate($perPage));
     }
 
     public function show(GamingSession $gamingSession)
     {
-        return response()->json($gamingSession->load(['pelanggan', 'pc', 'room', 'operator']));
+        return new \App\Http\Resources\GamingSessionResource($gamingSession->load(['pelanggan', 'pc', 'room', 'operator']));
     }
 
-    public function store(StoreGamingSessionRequest $request)
-    {
-        $validated = $request->validated();
 
-        $service = new GamingSessionService();
-        $created = $service->createActiveSession([
-            'pelanggan_id' => $validated['pelanggan_id'],
-            'room_id' => $validated['room_id'],
-            'pc_id' => $validated['pc_id'],
-            'operator_id' => $validated['operator_id'],
-            'started_at' => $validated['started_at'] ?? now(),
-        ]);
-
-        return response()->json(['message' => 'Gaming session berhasil dibuat', 'data' => $created], 201);
-    }
 
     public function destroy(GamingSession $gamingSession)
     {

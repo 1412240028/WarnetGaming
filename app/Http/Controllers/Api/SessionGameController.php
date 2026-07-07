@@ -14,7 +14,7 @@ class SessionGameController extends Controller
     {
         $query = SessionGame::query()->where('gaming_session_id', $gamingSessionId);
 
-        return response()->json($query->paginate(10));
+        return \App\Http\Resources\SessionGameResource::collection($query->paginate(10));
     }
 
     public function store(StoreSessionGameRequest $request, int $gamingSessionId)
@@ -35,7 +35,7 @@ class SessionGameController extends Controller
             'gaming_session_id' => $gamingSessionId,
         ]));
 
-        return response()->json(['message' => 'Game ditambahkan ke session', 'data' => $sessionGame], 201);
+        return (new \App\Http\Resources\SessionGameResource($sessionGame))->additional(['message' => 'Game ditambahkan ke session'])->response()->setStatusCode(201);
     }
 }
 

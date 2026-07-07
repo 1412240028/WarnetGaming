@@ -19,7 +19,7 @@ class RoomController extends Controller
             $query->where('type', $request->string('type'));
         }
 
-        return response()->json($query->paginate(10));
+        return \App\Http\Resources\RoomResource::collection($query->paginate(10));
     }
 
     public function store(StoreRoomRequest $request)
@@ -31,13 +31,13 @@ class RoomController extends Controller
             $room = Room::create($validated);
         });
 
-        return response()->json(['message' => 'Room berhasil ditambahkan', 'data' => $room], 201);
+        return (new \App\Http\Resources\RoomResource($room))->additional(['message' => 'Room berhasil ditambahkan'])->response()->setStatusCode(201);
     }
 
     public function show(Room $room)
     {
         $room->load('pcs', 'gamingSessions');
-        return response()->json($room);
+        return new \App\Http\Resources\RoomResource($room);
     }
 
     public function update(UpdateRoomRequest $request, Room $room)
@@ -48,7 +48,7 @@ class RoomController extends Controller
             $room->update($validated);
         });
 
-        return response()->json(['message' => 'Room berhasil diperbarui', 'data' => $room]);
+        return (new \App\Http\Resources\RoomResource($room))->additional(['message' => 'Room berhasil diperbarui']);
     }
 
     public function destroy(Request $request, Room $room)

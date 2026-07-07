@@ -23,7 +23,7 @@ class BookingSessionController extends Controller
             'started_at' => now(),
         ]);
 
-        return response()->json($created, 201);
+        return (new \App\Http\Resources\GamingSessionResource($created))->response()->setStatusCode(201);
     }
 }
 

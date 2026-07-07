@@ -21,7 +21,7 @@ class OperatorController extends Controller
             $query->onShift($request->string('shift'));
         }
 
-        return response()->json($query->paginate(10));
+        return \App\Http\Resources\OperatorResource::collection($query->paginate(10));
     }
 
     public function store(StoreOperatorRequest $request)
@@ -30,12 +30,12 @@ class OperatorController extends Controller
 
         $operator = \App\Models\Operator::create($validated);
 
-        return response()->json(['message' => 'Operator berhasil ditambahkan', 'data' => $operator], 201);
+        return (new \App\Http\Resources\OperatorResource($operator))->additional(['message' => 'Operator berhasil ditambahkan'])->response()->setStatusCode(201);
     }
 
     public function show(\App\Models\Operator $operator)
     {
-        return response()->json($operator);
+        return new \App\Http\Resources\OperatorResource($operator);
     }
 
     public function update(UpdateOperatorRequest $request, \App\Models\Operator $operator)
@@ -44,7 +44,7 @@ class OperatorController extends Controller
 
         $operator->update($validated);
 
-        return response()->json(['message' => 'Operator berhasil diperbarui', 'data' => $operator]);
+        return (new \App\Http\Resources\OperatorResource($operator))->additional(['message' => 'Operator berhasil diperbarui']);
     }
 
     public function destroy(\App\Models\Operator $operator)
