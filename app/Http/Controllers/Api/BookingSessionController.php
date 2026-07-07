@@ -4,18 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\GamingSessionService;
+use App\Http\Requests\StoreBookingSessionRequest;
 use Illuminate\Http\Request;
 
 class BookingSessionController extends Controller
 {
-    public function store(Request $request)
+    public function store(StoreBookingSessionRequest $request)
     {
-        $validated = $request->validate([
-            'pelanggan_id' => 'required|exists:pelanggans,id',
-            'room_id' => 'required|exists:rooms,id',
-            'pc_id' => 'required|exists:pcs,id',
-            'operator_id' => 'required|exists:operators,id',
-        ]);
+        $validated = $request->validated();
 
 
         $service = new GamingSessionService();

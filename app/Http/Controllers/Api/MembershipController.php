@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MembershipResource;
+use App\Http\Requests\StoreMembershipRequest;
+use App\Http\Requests\UpdateMembershipRequest;
 use Illuminate\Http\Request;
 
 class MembershipController extends Controller
@@ -15,41 +18,32 @@ class MembershipController extends Controller
             $query->where('level', $request->string('level'));
         }
 
-
-        return response()->json($query->paginate(10));
+        return MembershipResource::collection($query->paginate(10));
     }
 
-    public function store(Request $request)
+    public function store(StoreMembershipRequest $request)
     {
-        $validated = $request->validate([
-            'level' => 'required|string|max:50',
-            'discount_percent' => 'nullable|numeric|min:0|max:100',
-            'tag' => 'nullable|string|max:50',
-        ]);
+        $validated = $request->validated();
 
 
         $membership = \App\Models\Membership::create($validated);
 
-        return response()->json(['message' => 'Membership berhasil ditambahkan', 'data' => $membership], 201);
+        return (new MembershipResource($membership))->additional(['message' => 'Membership berhasil ditambahkan'])->response()->setStatusCode(201);
     }
 
     public function show(\App\Models\Membership $membership)
     {
-        return response()->json($membership);
+        return new MembershipResource($membership);
     }
 
-    public function update(Request $request, \App\Models\Membership $membership)
+    public function update(UpdateMembershipRequest $request, \App\Models\Membership $membership)
     {
-        $validated = $request->validate([
-            'level' => 'sometimes|required|string|max:50',
-            'discount_percent' => 'sometimes|nullable|numeric|min:0|max:100',
-            'tag' => 'sometimes|nullable|string|max:50',
-        ]);
+        $validated = $request->validated();
 
 
         $membership->update($validated);
 
-        return response()->json(['message' => 'Membership berhasil diperbarui', 'data' => $membership]);
+        return (new MembershipResource($membership))->additional(['message' => 'Membership berhasil diperbarui']);
     }
 
     public function destroy(\App\Models\Membership $membership)

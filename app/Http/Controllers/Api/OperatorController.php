@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreOperatorRequest;
+use App\Http\Requests\UpdateOperatorRequest;
 use Illuminate\Http\Request;
 
 class OperatorController extends Controller
@@ -22,13 +24,9 @@ class OperatorController extends Controller
         return response()->json($query->paginate(10));
     }
 
-    public function store(Request $request)
+    public function store(StoreOperatorRequest $request)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'shift' => 'nullable|string|max:30',
-            'room_id' => 'nullable|exists:rooms,id',
-        ]);
+        $validated = $request->validated();
 
         $operator = \App\Models\Operator::create($validated);
 
@@ -40,13 +38,9 @@ class OperatorController extends Controller
         return response()->json($operator);
     }
 
-    public function update(Request $request, \App\Models\Operator $operator)
+    public function update(UpdateOperatorRequest $request, \App\Models\Operator $operator)
     {
-        $validated = $request->validate([
-            'user_id' => 'sometimes|required|exists:users,id',
-            'shift' => 'sometimes|nullable|string|max:30',
-            'room_id' => 'sometimes|nullable|exists:rooms,id',
-        ]);
+        $validated = $request->validated();
 
         $operator->update($validated);
 

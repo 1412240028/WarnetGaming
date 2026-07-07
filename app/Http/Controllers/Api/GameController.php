@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Game;
+use App\Http\Resources\GameResource;
+use App\Http\Requests\StoreGameRequest;
+use App\Http\Requests\UpdateGameRequest;
 use Illuminate\Http\Request;
 
 class GameController extends Controller
@@ -13,21 +16,19 @@ class GameController extends Controller
      */
     public function index()
     {
-        return response()->json(Game::all());
+        return GameResource::collection(Game::all());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreGameRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+        $validated = $request->validated();
 
         $game = Game::create($validated);
 
-        return response()->json($game, 201);
+        return (new GameResource($game))->response()->setStatusCode(201);
     }
 
     /**
@@ -36,23 +37,21 @@ class GameController extends Controller
     public function show(string $id)
     {
         $game = Game::findOrFail($id);
-        return response()->json($game);
+        return new GameResource($game);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateGameRequest $request, string $id)
     {
         $game = Game::findOrFail($id);
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+        $validated = $request->validated();
 
         $game->update($validated);
 
-        return response()->json($game);
+        return new GameResource($game);
     }
 
     /**

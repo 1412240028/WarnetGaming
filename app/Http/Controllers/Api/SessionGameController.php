@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Exceptions\DuplicateSessionGameException;
 use App\Models\SessionGame;
+use App\Http\Requests\StoreSessionGameRequest;
 use Illuminate\Http\Request;
 
 class SessionGameController extends Controller
@@ -16,13 +17,9 @@ class SessionGameController extends Controller
         return response()->json($query->paginate(10));
     }
 
-    public function store(Request $request, int $gamingSessionId)
+    public function store(StoreSessionGameRequest $request, int $gamingSessionId)
     {
-        $validated = $request->validate([
-            'game_id' => 'required|integer|exists:games,id',
-            'played_at' => 'nullable|date',
-            'notes' => 'nullable|string|max:255',
-        ]);
+        $validated = $request->validated();
 
         // Application-level guard (unique constraint also protects DB)
         $alreadyExists = SessionGame::query()

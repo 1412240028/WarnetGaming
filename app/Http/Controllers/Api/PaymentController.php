@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePaymentRequest;
+use App\Http\Requests\UpdatePaymentRequest;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -19,13 +21,9 @@ class PaymentController extends Controller
         return response()->json($query->paginate(10));
     }
 
-    public function store(Request $request)
+    public function store(StorePaymentRequest $request)
     {
-        $validated = $request->validate([
-            'gaming_session_id' => 'required|exists:gaming_sessions,id',
-            'nominal' => 'required|numeric|min:0',
-            'method' => 'required|in:cash,qris,transfer,member',
-        ]);
+        $validated = $request->validated();
 
 
         $payment = \App\Models\Payment::create($validated);
@@ -38,13 +36,9 @@ class PaymentController extends Controller
         return response()->json($payment);
     }
 
-    public function update(Request $request, \App\Models\Payment $payment)
+    public function update(UpdatePaymentRequest $request, \App\Models\Payment $payment)
     {
-        $validated = $request->validate([
-            'gaming_session_id' => 'sometimes|required|exists:gaming_sessions,id',
-            'nominal' => 'sometimes|numeric|min:0',
-            'method' => 'sometimes|required|in:cash,qris,transfer,member',
-        ]);
+        $validated = $request->validated();
 
 
         $payment->update($validated);

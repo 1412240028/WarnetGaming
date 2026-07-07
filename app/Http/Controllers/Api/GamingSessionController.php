@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\GamingSession;
 use App\Services\GamingSessionService;
+use App\Http\Requests\StoreGamingSessionRequest;
 use Illuminate\Http\Request;
 
 class GamingSessionController extends Controller
@@ -41,15 +42,9 @@ class GamingSessionController extends Controller
         return response()->json($gamingSession->load(['pelanggan', 'pc', 'room', 'operator']));
     }
 
-    public function store(Request $request)
+    public function store(StoreGamingSessionRequest $request)
     {
-        $validated = $request->validate([
-            'pelanggan_id' => 'required|exists:pelanggans,id',
-            'room_id' => 'required|exists:rooms,id',
-            'pc_id' => 'required|exists:pcs,id',
-            'operator_id' => 'required|exists:operators,id',
-            'started_at' => 'nullable|date',
-        ]);
+        $validated = $request->validated();
 
         $service = new GamingSessionService();
         $created = $service->createActiveSession([

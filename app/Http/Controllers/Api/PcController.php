@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PcResource;
+use App\Http\Requests\StorePcRequest;
+use App\Http\Requests\UpdatePcRequest;
 use Illuminate\Http\Request;
 
 class PcController extends Controller
@@ -19,40 +22,32 @@ class PcController extends Controller
             $query->where('status', $request->string('status'));
         }
 
-        return response()->json($query->paginate(10));
+        return PcResource::collection($query->paginate(10));
     }
 
-    public function store(Request $request)
+    public function store(StorePcRequest $request)
     {
-        $validated = $request->validate([
-            'code' => 'required|string|max:20',
-            'status' => 'nullable|string|max:50',
-            'room_id' => 'required|exists:rooms,id',
-        ]);
+        $validated = $request->validated();
 
 
         $pc = \App\Models\Pc::create($validated);
 
-        return response()->json(['message' => 'PC berhasil ditambahkan', 'data' => $pc], 201);
+        return (new PcResource($pc))->additional(['message' => 'PC berhasil ditambahkan'])->response()->setStatusCode(201);
     }
 
     public function show(\App\Models\Pc $pc)
     {
-        return response()->json($pc);
+        return new PcResource($pc->load('room'));
     }
 
-    public function update(Request $request, \App\Models\Pc $pc)
+    public function update(UpdatePcRequest $request, \App\Models\Pc $pc)
     {
-        $validated = $request->validate([
-            'code' => 'sometimes|required|string|max:20',
-            'status' => 'sometimes|nullable|string|max:50',
-            'room_id' => 'sometimes|nullable|exists:rooms,id',
-        ]);
+        $validated = $request->validated();
 
 
         $pc->update($validated);
 
-        return response()->json(['message' => 'PC berhasil diperbarui', 'data' => $pc]);
+        return (new PcResource($pc))->additional(['message' => 'PC berhasil diperbarui']);
     }
 
     public function destroy(\App\Models\Pc $pc)

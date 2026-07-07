@@ -26,7 +26,7 @@ class FoodOrderController extends Controller
         $validated = $request->validated();
 
         $session = GamingSession::findOrFail($validated['gaming_session_id']);
-        if ($session->status !== 'active' && $session->status !== 'started') {
+        if ($session->status !== \App\Enums\GamingSessionStatus::ACTIVE) {
             return response()->json(['message' => 'Gaming session is not active'], 422);
         }
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pelanggan;
+use App\Http\Requests\StorePelangganRequest;
+use App\Http\Requests\UpdatePelangganRequest;
 use Illuminate\Http\Request;
 
 class PelangganController extends Controller
@@ -19,13 +21,9 @@ class PelangganController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePelangganRequest $request)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'membership_id' => 'nullable|exists:memberships,id',
-            'status' => 'required|string|max:255',
-        ]);
+        $validated = $request->validated();
 
         $pelanggan = Pelanggan::create($validated);
 
@@ -44,15 +42,11 @@ class PelangganController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePelangganRequest $request, string $id)
     {
         $pelanggan = Pelanggan::findOrFail($id);
 
-        $validated = $request->validate([
-            'user_id' => 'sometimes|required|exists:users,id',
-            'membership_id' => 'nullable|exists:memberships,id',
-            'status' => 'sometimes|required|string|max:255',
-        ]);
+        $validated = $request->validated();
 
         $pelanggan->update($validated);
 

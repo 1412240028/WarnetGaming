@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\GamingSessionStatus;
+use App\Exceptions\PcNotAvailableException;
 use App\Models\GamingSession;
 use App\Models\Pc;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +30,7 @@ class GamingSessionService
             // This project uses Indonesian status values in tests: tersedia / in_use
             $availableStatuses = ['available', 'tersedia'];
             if (!in_array($pc->status, $availableStatuses, true)) {
-                throw new \InvalidArgumentException(
+                throw new PcNotAvailableException(
                     sprintf('PC tidak tersedia. status=%s', $pc->status)
                 );
             }
@@ -36,11 +38,11 @@ class GamingSessionService
             // Defensive: prevent multiple active sessions on same PC
             $existingActive = GamingSession::query()
                 ->where('pc_id', $pcId)
-                ->where('status', 'active')
+                ->where('status', GamingSessionStatus::ACTIVE)
                 ->exists();
 
             if ($existingActive) {
-                throw new \InvalidArgumentException('PC sedang digunakan');
+                throw new PcNotAvailableException('PC sedang digunakan');
             }
 
             $created = GamingSession::create([
@@ -48,7 +50,7 @@ class GamingSessionService
                 'room_id' => $data['room_id'],
                 'pc_id' => $pcId,
                 'operator_id' => $data['operator_id'],
-                'status' => 'active',
+                'status' => GamingSessionStatus::ACTIVE,
                 'started_at' => $data['started_at'] ?? now(),
             ]);
 

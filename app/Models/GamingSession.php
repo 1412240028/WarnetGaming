@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -40,6 +41,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class GamingSession extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'pelanggan_id',
         'operator_id',
@@ -53,6 +55,7 @@ class GamingSession extends Model
     protected $casts = [
         'started_at' => 'datetime',
         'ended_at' => 'datetime',
+        'status' => \App\Enums\GamingSessionStatus::class,
     ];
 
     public function pelanggan()
@@ -91,7 +94,7 @@ class GamingSession extends Model
      */
     public function scopeActive($query)
     {
-        return $query->whereIn('status', ['active', 'started']);
+        return $query->where('status', \App\Enums\GamingSessionStatus::ACTIVE);
     }
 
     /**
@@ -100,6 +103,6 @@ class GamingSession extends Model
      */
     public function scopeFinished($query)
     {
-        return $query->whereIn('status', ['finished', 'ended']);
+        return $query->where('status', \App\Enums\GamingSessionStatus::FINISHED);
     }
 }
