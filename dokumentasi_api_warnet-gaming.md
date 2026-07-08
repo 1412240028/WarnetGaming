@@ -64,7 +64,7 @@ Pengerjaan mencakup seluruh lapisan aplikasi back-end (Laravel), dari perancanga
 ### **1.4 Teknologi yang Digunakan**
 | Komponen | Teknologi | Fungsi |
 |---|---|---|
-| Framework | Laravel 11 | Back-end & routing API |
+| Framework | Laravel 13 | Back-end & routing API |
 | Bahasa | PHP 8.3+ | Server-side scripting |
 | Database | MySQL 8.0+ | Penyimpanan data relasional |
 | Auth API | Laravel Sanctum | Bearer Token authentication |
@@ -110,8 +110,71 @@ Menyimpan akun login semua peran. Menggunakan *soft-delete*.
 | status | VARCHAR | NOT NULL | Status pelanggan |
 | deleted_at | TIMESTAMP| NULLABLE | Soft delete |
 
-**3. Tabel `gaming_sessions`**
-Menyimpan riwayat sesi sewa PC.
+**3. Tabel `rooms`**
+Menyimpan data ruangan dalam warnet. Menggunakan *soft-delete*.
+| Kolom | Tipe Data | Constraint | Keterangan |
+|---|---|---|---|
+| id | BIGINT | PK, AI | Primary key |
+| name | VARCHAR | NOT NULL | Nama ruangan |
+| type | VARCHAR | NULLABLE | Tipe ruangan (reguler/VIP) |
+| deleted_at | TIMESTAMP | NULLABLE | Soft delete |
+
+**4. Tabel `pcs`**
+Menyimpan data komputer dalam suatu ruangan. Menggunakan *soft-delete*.
+| Kolom | Tipe Data | Constraint | Keterangan |
+|---|---|---|---|
+| id | BIGINT | PK, AI | Primary key |
+| code | VARCHAR | NOT NULL | Kode PC (PC-01) |
+| room_id | BIGINT | FK -> rooms.id | Ruangan tempat PC |
+| status | VARCHAR | NOT NULL | Status (tersedia/in_use) |
+| deleted_at | TIMESTAMP | NULLABLE | Soft delete |
+
+**5. Tabel `operators`**
+Menyimpan data operator/karyawan yang bertugas.
+| Kolom | Tipe Data | Constraint | Keterangan |
+|---|---|---|---|
+| id | BIGINT | PK, AI | Primary key |
+| user_id | BIGINT | FK -> users.id | Referensi login |
+| room_id | BIGINT | FK -> rooms.id | Ruangan tugas |
+| shift | VARCHAR | NULLABLE | Shift kerja (pagi/siang/malam) |
+
+**6. Tabel `memberships`**
+Menyimpan level keanggotaan pelanggan.
+| Kolom | Tipe Data | Constraint | Keterangan |
+|---|---|---|---|
+| id | BIGINT | PK, AI | Primary key |
+| level | VARCHAR | NOT NULL | Nama level (Gold, Diamond) |
+| discount_percent | INTEGER | NULLABLE | Diskon dalam persen |
+| tag | VARCHAR | NULLABLE | Label tambahan |
+
+**7. Tabel `games`**
+Menyimpan master data game yang tersedia.
+| Kolom | Tipe Data | Constraint | Keterangan |
+|---|---|---|---|
+| id | BIGINT | PK, AI | Primary key |
+| name | VARCHAR | NOT NULL | Nama game |
+
+**8. Tabel `food_beverages`**
+Menyimpan data menu makanan dan minuman.
+| Kolom | Tipe Data | Constraint | Keterangan |
+|---|---|---|---|
+| id | BIGINT | PK, AI | Primary key |
+| name | VARCHAR | NOT NULL | Nama item |
+| category | VARCHAR | NOT NULL | Kategori (food/drink/snack) |
+| price | DECIMAL | NOT NULL | Harga satuan |
+| stock | INTEGER | NOT NULL | Jumlah stok tersedia |
+| is_available | BOOLEAN | DEFAULT true | Status ketersediaan |
+
+**9. Tabel `pc_games`**
+Relasi M:N antara PC dan game yang terinstall di PC tersebut.
+| Kolom | Tipe Data | Constraint | Keterangan |
+|---|---|---|---|
+| id | BIGINT | PK, AI | Primary key |
+| pc_id | BIGINT | FK -> pcs.id | Referensi PC |
+| game_id | BIGINT | FK -> games.id | Referensi game |
+
+**10. Tabel `gaming_sessions`**
+Menyimpan riwayat sesi sewa PC. Menggunakan *soft-delete*.
 | Kolom | Tipe Data | Constraint | Keterangan |
 |---|---|---|---|
 | id | BIGINT | PK, AI | Primary key |
@@ -120,35 +183,74 @@ Menyimpan riwayat sesi sewa PC.
 | room_id | BIGINT | FK -> rooms | Ruangan |
 | operator_id | BIGINT | FK -> operators | Operator shift |
 | status | VARCHAR | Enum (active/finished) | Status sesi |
-| started_at | DATETIME| NOT NULL | Waktu mulai |
-| deleted_at | TIMESTAMP| NULLABLE | Soft delete |
+| started_at | DATETIME | NOT NULL | Waktu mulai |
+| ended_at | DATETIME | NULLABLE | Waktu selesai |
+| deleted_at | TIMESTAMP | NULLABLE | Soft delete |
 
-**4. Tabel `food_orders` & `food_order_items`**
-Mencatat pesanan makanan ke suatu sesi.
-- `food_orders`: Menyimpan `gaming_session_id`, `total_amount`, `status` (pending/paid/delivered).
-- `food_order_items`: Menyimpan detail `food_beverage_id`, `quantity`, `subtotal`.
+**11. Tabel `session_games`**
+Relasi M:N antara sesi game dan game yang dimainkan dalam sesi tersebut. Dilindungi unique constraint (gaming_session_id, game_id) untuk mencegah duplikasi.
+| Kolom | Tipe Data | Constraint | Keterangan |
+|---|---|---|---|
+| id | BIGINT | PK, AI | Primary key |
+| gaming_session_id | BIGINT | FK -> gaming_sessions.id | Referensi sesi |
+| game_id | BIGINT | FK -> games.id | Referensi game |
+
+**12. Tabel `food_orders`**
+Mencatat pesanan makanan ke suatu sesi. Menggunakan *soft-delete*.
+| Kolom | Tipe Data | Constraint | Keterangan |
+|---|---|---|---|
+| id | BIGINT | PK, AI | Primary key |
+| gaming_session_id | BIGINT | FK -> gaming_sessions.id | Sesi pemesan |
+| pelanggan_id | BIGINT | FK -> pelanggans.id | Pelanggan pemesan |
+| operator_id | BIGINT | FK -> operators.id | Operator yg memproses |
+| total_amount | DECIMAL | NOT NULL | Total harga |
+| status | VARCHAR | NOT NULL | Status (pending/paid/delivered/cancelled) |
+| deleted_at | TIMESTAMP | NULLABLE | Soft delete |
+
+**13. Tabel `food_order_items`**
+Menyimpan detail item dalam suatu pesanan makanan.
+| Kolom | Tipe Data | Constraint | Keterangan |
+|---|---|---|---|
+| id | BIGINT | PK, AI | Primary key |
+| food_order_id | BIGINT | FK -> food_orders.id | Referensi pesanan |
+| food_beverage_id | BIGINT | FK -> food_beverages.id | Referensi menu |
+| quantity | INTEGER | NOT NULL | Jumlah dipesan |
+| subtotal | DECIMAL | NOT NULL | Subtotal harga |
+
+**14. Tabel `payments`**
+Mencatat transaksi pembayaran untuk suatu sesi. Menggunakan *soft-delete*.
+| Kolom | Tipe Data | Constraint | Keterangan |
+|---|---|---|---|
+| id | BIGINT | PK, AI | Primary key |
+| gaming_session_id | BIGINT | FK -> gaming_sessions.id | Sesi yg dibayar |
+| method | VARCHAR | NOT NULL | Metode (cash/qris/transfer/member) |
+| nominal | INTEGER | NOT NULL | Jumlah pembayaran |
+| status | VARCHAR | NULLABLE | Status pembayaran |
+| deleted_at | TIMESTAMP | NULLABLE | Soft delete |
 
 ---
 
 ## **BAB 3 – IMPLEMENTASI MODEL ELOQUENT**
 
 ### **3.1 Daftar Model**
-Semua model menerapkan `SoftDeletes` untuk melindungi riwayat data.
+Sebagian model menerapkan `SoftDeletes` untuk melindungi riwayat data (User, Pelanggan, Room, Pc, GamingSession, FoodOrder, Payment); sisanya tidak (Operator, Membership, Game, PcGame, SessionGame, FoodBeverage, FoodOrderItem, PelangganGame).
 | No | Model | Tabel | Fitur Khusus / Relasi |
 |---|---|---|---|
 | 1 | `User` | users | HasApiTokens, SoftDeletes |
-| 2 | `Pelanggan` | pelanggans | belongsTo User, belongsTo Membership |
-| 3 | `Operator` | operators | belongsTo User. Scopes: onShift(), inRoom() |
+| 2 | `Pelanggan` | pelanggans | SoftDeletes; belongsTo User, belongsTo Membership; hasMany GamingSession |
+| 3 | `Operator` | operators | belongsTo User, belongsTo Room; Scopes: onShift(), inRoom() |
 | 4 | `Membership` | memberships | hasMany Pelanggan |
-| 5 | `Room` | rooms | hasMany Pc, hasMany GamingSession |
-| 6 | `Pc` | pcs | belongsTo Room, belongsToMany Game |
-| 7 | `Game` | games | belongsToMany Pc |
-| 8 | `GamingSession`| gaming_sessions | belongsTo(Pelanggan, Pc, Room, Operator). Scopes: active(), finished() |
+| 5 | `Room` | rooms | SoftDeletes; hasMany Pc, hasMany GamingSession |
+| 6 | `Pc` | pcs | SoftDeletes; belongsTo Room, belongsToMany Game |
+| 7 | `Game` | games | belongsToMany Pc, belongsToMany GamingSession, belongsToMany User (user_games) |
+| 8 | `GamingSession`| gaming_sessions | SoftDeletes; belongsTo(Pelanggan, Pc, Room, Operator); Scopes: active(), finished() |
 | 9 | `SessionGame` | session_games | belongsTo GamingSession, belongsTo Game |
-| 10 | `FoodOrder` | food_orders | belongsTo GamingSession, hasMany FoodOrderItem |
+| 10 | `FoodOrder` | food_orders | SoftDeletes; belongsTo GamingSession, belongsTo Pelanggan, hasMany FoodOrderItem; Scope: pending() |
 | 11 | `FoodOrderItem`| food_order_items| belongsTo FoodOrder, belongsTo FoodBeverage |
-| 12 | `FoodBeverage` | food_beverages | hasMany FoodOrderItem |
-| 13 | `Payment` | payments | belongsTo GamingSession |
+| 12 | `FoodBeverage` | food_beverages | hasMany FoodOrderItem; Scope: available() |
+| 13 | `Payment` | payments | SoftDeletes; belongsTo GamingSession |
+| 14 | `PcGame` | pc_games | belongsTo Pc, belongsTo Game (pivot PC–Game) |
+| 15 | `PelangganGame` | pelanggan_games | belongsTo User, belongsTo Game (track play time) |
 
 ### **3.2 Urutan Migrasi**
 Agar relasi *Foreign Key* tidak error, urutan migrasi adalah:
