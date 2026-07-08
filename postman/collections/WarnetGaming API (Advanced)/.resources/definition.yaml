@@ -1,0 +1,5 @@
+$kind: collection
+description: Advanced Postman collection with auto-token script, path variables, and sample payloads.
+variables:
+  base_url: http://localhost:8000/api
+  token: ""

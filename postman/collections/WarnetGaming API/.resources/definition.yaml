@@ -1,5 +1,0 @@
-$kind: collection
-description: Auto-generated Postman collection for WarnetGaming
-variables:
-  base_url: http://localhost:8000/api
-  token: ""

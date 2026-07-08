@@ -1,0 +1,13 @@
+$kind: http-request
+name: "[GET] api/memberships/{membership}"
+url: "{{base_url}}/memberships/:membership"
+method: GET
+headers:
+  Accept: application/json
+pathVariables:
+  membership: "1"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 3000

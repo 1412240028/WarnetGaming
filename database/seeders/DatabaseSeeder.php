@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
             SessionGameSeeder::class,
             PcGameSeeder::class,
             UserGameSeeder::class,
+            FoodBeverageSeeder::class,
+            FoodOrderSeeder::class,
         ]);
     }
 }

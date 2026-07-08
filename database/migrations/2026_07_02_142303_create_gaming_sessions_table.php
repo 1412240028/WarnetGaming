@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamp('started_at');
             $table->timestamp('ended_at')->nullable();
 
-            $table->string('status')->default('started'); // started, finished
+            $table->string('status')->default('active'); // active, finished
 
             $table->timestamps();
         });

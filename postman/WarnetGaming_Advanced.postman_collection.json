@@ -56,7 +56,7 @@
                         },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\"\n}",
+                            "raw": "{\n    \"name\": \"Budi Santoso\",\n    \"email\": \"budi@warnet.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -92,7 +92,7 @@
                         },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password\"\n}",
+                            "raw": "{\n    \"email\": \"admin@warnet.com\",\n    \"password\": \"password\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -307,7 +307,7 @@
                         },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \n}",
+                            "raw": "{\n    \"name\": \"Room VIP 2\",\n    \"type\": \"VIP\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -867,7 +867,7 @@
                         },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \n}",
+                            "raw": "{\n    \"name\": \"Indomie Telur\",\n    \"category\": \"food\",\n    \"price\": 10000,\n    \"stock\": 50,\n    \"is_available\": true\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -899,7 +899,7 @@
                             "variable": [
                                 {
                                     "key": "foodBeverage",
-                                    "value": "1"
+                                    "value": "2"
                                 }
                             ]
                         },
@@ -947,7 +947,7 @@
                             "variable": [
                                 {
                                     "key": "foodBeverage",
-                                    "value": "1"
+                                    "value": "2"
                                 }
                             ]
                         },
@@ -1120,7 +1120,7 @@
                         },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"gaming_session_id\": 1,\n    \"pelanggan_id\": 1,\n    \"items\": [\n        {\n            \"food_beverage_id\": 1,\n            \"quantity\": 2\n        }\n    ]\n}",
+                            "raw": "{\n    \"gaming_session_id\": 1,\n    \"pelanggan_id\": 1,\n    \"items\": [\n        {\n            \"food_beverage_id\": 2,\n            \"quantity\": 2\n        }\n    ]\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -1198,7 +1198,7 @@
                         },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \n}",
+                            "raw": "{\n    \"user_id\": 2,\n    \"room_id\": 1,\n    \"shift\": \"Pagi\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -1402,7 +1402,7 @@
                         },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \n}",
+                            "raw": "{\n    \"level\": \"Diamond\",\n    \"discount_percent\": 20\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -1810,7 +1810,7 @@
                         },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"user_id\": 1,\n    \"membership_id\": 1,\n    \"status\": \"active\"\n}",
+                            "raw": "{\n    \"user_id\": 3,\n    \"membership_id\": 2,\n    \"status\": \"active\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"

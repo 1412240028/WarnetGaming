@@ -1,7 +1,0 @@
-$kind: http-request
-name: "[GET] api/pelanggans"
-url: "{{base_url}}/pelanggans"
-method: GET
-headers:
-  Accept: application/json
-order: 1000

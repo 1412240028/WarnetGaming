@@ -1,0 +1,13 @@
+$kind: http-request
+name: "[DELETE] api/rooms/{room}"
+url: "{{base_url}}/rooms/:room"
+method: DELETE
+headers:
+  Accept: application/json
+pathVariables:
+  room: "1"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 5000

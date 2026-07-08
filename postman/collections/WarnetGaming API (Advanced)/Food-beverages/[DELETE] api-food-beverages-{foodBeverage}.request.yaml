@@ -1,0 +1,13 @@
+$kind: http-request
+name: "[DELETE] api/food-beverages/{foodBeverage}"
+url: "{{base_url}}/food-beverages/:foodBeverage"
+method: DELETE
+headers:
+  Accept: application/json
+pathVariables:
+  foodBeverage: "1"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 5000

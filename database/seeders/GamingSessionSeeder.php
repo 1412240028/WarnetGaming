@@ -21,7 +21,7 @@ class GamingSessionSeeder extends Seeder
         $pcs = Pc::all();
         $rooms = Room::all();
 
-        $statuses = ['started', 'finished'];
+        $statuses = ['active', 'finished'];
 
         $count = 50;
 
@@ -51,7 +51,7 @@ class GamingSessionSeeder extends Seeder
                 'room_id' => $room->id,
                 'started_at' => $startedAt,
                 'ended_at' => $endedAt,
-                'status' => $endedAt ? 'finished' : 'started',
+                'status' => $endedAt ? 'finished' : 'active',
             ]);
         }
     }

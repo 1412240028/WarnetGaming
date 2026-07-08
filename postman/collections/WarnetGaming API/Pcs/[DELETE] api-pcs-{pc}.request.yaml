@@ -1,7 +1,0 @@
-$kind: http-request
-name: "[DELETE] api/pcs/{pc}"
-url: "{{base_url}}/pcs/{pc}"
-method: DELETE
-headers:
-  Accept: application/json
-order: 5000

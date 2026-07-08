@@ -1,0 +1,13 @@
+$kind: http-request
+name: "[GET] api/pelanggans/{pelanggan}"
+url: "{{base_url}}/pelanggans/:pelanggan"
+method: GET
+headers:
+  Accept: application/json
+pathVariables:
+  pelanggan: "1"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 3000

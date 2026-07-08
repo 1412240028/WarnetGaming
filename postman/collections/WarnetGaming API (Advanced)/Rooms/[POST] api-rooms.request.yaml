@@ -1,0 +1,18 @@
+$kind: http-request
+name: "[POST] api/rooms"
+url: "{{base_url}}/rooms"
+method: POST
+headers:
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+        "name": "Room VIP 2",
+        "type": "VIP"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 3000

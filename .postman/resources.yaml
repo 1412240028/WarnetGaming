@@ -1,13 +1,5 @@
-# Use this workspace to collaborate
 workspace:
   id: 35e0a209-d97a-4322-8372-cdb0670467a9
-
 cloudResources:
   collections:
-    ..\postman\collections\WarnetGaming API: edd6f0a3-0597-45f0-851e-69967a76b29f
-
-# All resources in the `postman/` folder are automatically registered in Local View.
-# Point to additional files outside the `postman/` folder to register them individually. Example:
-#localResources:
-#  collections:
-#    - ../tests/E2E Test Collection/
+    ../postman/collections/WarnetGaming API (Advanced): 54786987-a8783e67-91cf-42f2-bde5-d5960fbf4d98

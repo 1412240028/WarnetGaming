@@ -55,7 +55,7 @@ class RoleMiddlewareTest extends TestCase
             'pc_id' => $this->pc->id,
             'room_id' => $this->room->id,
             'started_at' => now(),
-            'status' => 'started',
+            'status' => 'active',
         ]);
     }
 
@@ -185,7 +185,7 @@ class RoleMiddlewareTest extends TestCase
                 ['food_beverage_id' => $this->food->id, 'quantity' => 1],
             ],
         ]);
-        $orderId = $orderResponse->json('id');
+        $orderId = $orderResponse->json('data.id');
 
         $response = $this->actingAs($this->operatorUser, 'sanctum')
             ->putJson("/api/food-orders/{$orderId}/status", ['status' => 'paid']);
@@ -203,7 +203,7 @@ class RoleMiddlewareTest extends TestCase
                 ['food_beverage_id' => $this->food->id, 'quantity' => 1],
             ],
         ]);
-        $orderId = $orderResponse->json('id');
+        $orderId = $orderResponse->json('data.id');
 
         $response = $this->actingAs($this->pelangganUser, 'sanctum')
             ->putJson("/api/food-orders/{$orderId}/status", ['status' => 'paid']);

@@ -1,0 +1,19 @@
+$kind: http-request
+name: "[PUT] api/memberships/{membership}"
+url: "{{base_url}}/memberships/:membership"
+method: PUT
+headers:
+  Accept: application/json
+pathVariables:
+  membership: "1"
+body:
+  type: json
+  content: |-
+    {
+        
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 4000

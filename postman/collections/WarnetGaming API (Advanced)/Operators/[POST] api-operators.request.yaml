@@ -1,0 +1,19 @@
+$kind: http-request
+name: "[POST] api/operators"
+url: "{{base_url}}/operators"
+method: POST
+headers:
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+        "user_id": 2,
+        "room_id": 1,
+        "shift": "Pagi"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 2000

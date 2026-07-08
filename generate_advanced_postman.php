@@ -34,19 +34,37 @@ function getSampleBody($uri, $method) {
     if ($method !== 'POST' && $method !== 'PUT' && $method !== 'PATCH') return "{\n    \n}";
     
     if ($uri === 'api/login') {
-        return json_encode(["email" => "admin@example.com", "password" => "password"], JSON_PRETTY_PRINT);
+        return json_encode(["email" => "admin@warnet.com", "password" => "password"], JSON_PRETTY_PRINT);
     }
     if ($uri === 'api/register') {
-        return json_encode(["name" => "John Doe", "email" => "john@example.com", "password" => "password", "password_confirmation" => "password"], JSON_PRETTY_PRINT);
+        return json_encode(["name" => "Budi Santoso", "email" => "budi@warnet.com", "password" => "password", "password_confirmation" => "password"], JSON_PRETTY_PRINT);
     }
     if ($uri === 'api/pelanggans') {
-        return json_encode(["user_id" => 1, "membership_id" => 1, "status" => "active"], JSON_PRETTY_PRINT);
+        return json_encode(["user_id" => 3, "membership_id" => 2, "status" => "active"], JSON_PRETTY_PRINT);
+    }
+    if ($uri === 'api/operators') {
+        return json_encode(["user_id" => 2, "room_id" => 1, "shift" => "Pagi"], JSON_PRETTY_PRINT);
+    }
+    if ($uri === 'api/memberships') {
+        return json_encode(["level" => "Diamond", "discount_percent" => 20], JSON_PRETTY_PRINT);
+    }
+    if ($uri === 'api/rooms') {
+        return json_encode(["name" => "Room VIP 2", "type" => "VIP"], JSON_PRETTY_PRINT);
+    }
+    if ($uri === 'api/pcs') {
+        return json_encode(["code" => "PC21", "room_id" => 1, "status" => "available"], JSON_PRETTY_PRINT);
+    }
+    if ($uri === 'api/games') {
+        return json_encode(["name" => "Mobile Legends"], JSON_PRETTY_PRINT);
+    }
+    if ($uri === 'api/food-beverages') {
+        return json_encode(["name" => "Indomie Telur", "category" => "food", "price" => 10000, "stock" => 50, "is_available" => true], JSON_PRETTY_PRINT);
     }
     if ($uri === 'api/booking-sessions') {
         return json_encode(["pelanggan_id" => 1, "room_id" => 1, "pc_id" => 1, "operator_id" => 1], JSON_PRETTY_PRINT);
     }
     if ($uri === 'api/food-orders') {
-        return json_encode(["gaming_session_id" => 1, "pelanggan_id" => 1, "items" => [["food_beverage_id" => 1, "quantity" => 2]]], JSON_PRETTY_PRINT);
+        return json_encode(["gaming_session_id" => 1, "pelanggan_id" => 1, "items" => [["food_beverage_id" => 2, "quantity" => 2]]], JSON_PRETTY_PRINT);
     }
     if (str_contains($uri, 'food-orders') && str_contains($uri, 'status')) {
         return json_encode(["status" => "paid"], JSON_PRETTY_PRINT);
@@ -93,9 +111,11 @@ foreach ($routes as $route) {
             $varName = str_replace('?', '', $matches[1]);
             $postmanPath[] = ":" . $varName;
             $rawPathStr[] = ":" . $varName;
+            $val = "1";
+            if ($varName === 'foodBeverage') $val = "2";
             $urlVariables[] = [
                 "key" => $varName,
-                "value" => "1" // default ID
+                "value" => $val
             ];
         } else {
             $postmanPath[] = $p;

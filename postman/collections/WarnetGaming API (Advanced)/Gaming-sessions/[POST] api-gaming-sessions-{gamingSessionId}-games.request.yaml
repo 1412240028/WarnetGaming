@@ -1,0 +1,20 @@
+$kind: http-request
+name: "[POST] api/gaming-sessions/{gamingSessionId}/games"
+url: "{{base_url}}/gaming-sessions/:gamingSessionId/games"
+method: POST
+headers:
+  Accept: application/json
+pathVariables:
+  gamingSessionId: "1"
+body:
+  type: json
+  content: |-
+    {
+        "game_id": 1,
+        "notes": "Ranked match"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 5000

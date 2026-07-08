@@ -1,0 +1,11 @@
+$kind: http-request
+name: "[GET] api/pelanggans"
+url: "{{base_url}}/pelanggans"
+method: GET
+headers:
+  Accept: application/json
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 1000

@@ -1,0 +1,13 @@
+$kind: http-request
+name: "[DELETE] api/gaming-sessions/{gamingSession}"
+url: "{{base_url}}/gaming-sessions/:gamingSession"
+method: DELETE
+headers:
+  Accept: application/json
+pathVariables:
+  gamingSession: "1"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 3000
