@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{base_url}}/logout"
+method: POST
+headers:
+  Accept: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status 200', () => pm.response.to.have.status(200));
+      pm.test('Logout message', () => {
+          pm.expect(pm.response.json().message).to.eql('Logged out successfully');
+      });
+    language: text/javascript
+order: 4000

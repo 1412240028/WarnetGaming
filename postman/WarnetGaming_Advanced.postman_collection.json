@@ -1,95 +1,141 @@
 {
     "info": {
         "name": "WarnetGaming API (Advanced)",
-        "description": "Advanced Postman collection with auto-token script, path variables, and sample payloads.",
-        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+        "description": "Complete Postman collection for WarnetGaming REST API.\n\n## Setup\n1. Import this collection into Postman.\n2. Set `base_url` collection variable to your server (default: http://localhost:8000/api).\n3. Run `[POST] Login` first to auto-set the `token` variable.\n\n## Auth\n- All protected endpoints auto-inherit the Bearer token via collection-level auth.\n- Token is auto-extracted from login response.\n\n## Roles\n- `role:admin` — full CRUD on rooms, operators, memberships, food-beverages.\n- `role:admin,operator` — payments, pelanggans, gaming-sessions destroy, food-order status.\n- `pelanggan` — booking-sessions, food-orders, read-only masters.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{token}}",
+                "type": "string"
+            }
+        ]
     },
     "item": [
         {
-            "name": "Health",
+            "name": "Auth",
             "item": [
                 {
-                    "name": "[GET] api\/health",
+                    "name": "[GET] Health Check",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Body has status ok', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.status).to.eql('ok');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/health",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "health"
-                            ]
+                            "raw": "{{base_url}}/health",
+                            "host": ["{{base_url}}"],
+                            "path": ["health"]
                         }
                     },
                     "response": []
-                }
-            ]
-        },
-        {
-            "name": "Register",
-            "item": [
+                },
                 {
-                    "name": "[POST] api\/register",
+                    "name": "[POST] Register",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                                    "pm.test('Response has token and user', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json).to.have.property('token');",
+                                    "    pm.expect(json).to.have.property('user');",
+                                    "    pm.expect(json.user).to.have.property('id');",
+                                    "    pm.expect(json.user).to.have.property('name');",
+                                    "    pm.expect(json.user).to.have.property('email');",
+                                    "    pm.expect(json.user).to.have.property('role');",
+                                    "});",
+                                    "pm.collectionVariables.set('token', pm.response.json().token);"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "POST",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
                             }
                         ],
-                        "url": {
-                            "raw": "{{base_url}}\/register",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "register"
-                            ]
-                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"Budi Santoso\",\n    \"email\": \"budi@warnet.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\"\n}",
+                            "raw": "{\n    \"name\": \"Budi Santoso\",\n    \"email\": \"budi@warnet.com\",\n    \"password\": \"password\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
                                 }
                             }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/register",
+                            "host": ["{{base_url}}"],
+                            "path": ["register"]
                         }
                     },
                     "response": []
-                }
-            ]
-        },
-        {
-            "name": "Login",
-            "item": [
+                },
                 {
-                    "name": "[POST] api\/login",
+                    "name": "[POST] Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "const json = pm.response.json();",
+                                    "pm.test('Response has token', () => {",
+                                    "    pm.expect(json).to.have.property('token');",
+                                    "});",
+                                    "if (json.token) {",
+                                    "    pm.collectionVariables.set('token', json.token);",
+                                    "    console.log('Token auto-set to:', json.token.substring(0, 20) + '...');",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "POST",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
                             }
                         ],
-                        "url": {
-                            "raw": "{{base_url}}\/login",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "login"
-                            ]
-                        },
                         "body": {
                             "mode": "raw",
                             "raw": "{\n    \"email\": \"admin@warnet.com\",\n    \"password\": \"password\"\n}",
@@ -98,104 +144,77 @@
                                     "language": "json"
                                 }
                             }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/login",
+                            "host": ["{{base_url}}"],
+                            "path": ["login"]
                         }
                     },
-                    "response": [],
+                    "response": []
+                },
+                {
+                    "name": "[POST] Logout",
                     "event": [
                         {
                             "listen": "test",
                             "script": {
-                                "type": "text\/javascript",
                                 "exec": [
-                                    "var jsonData = pm.response.json();",
-                                    "if (jsonData.token) {",
-                                    "    pm.collectionVariables.set(\"token\", jsonData.token);",
-                                    "    console.log(\"Token automatically set!\");",
-                                    "}"
-                                ]
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Logout message', () => {",
+                                    "    pm.expect(pm.response.json().message).to.eql('Logged out successfully');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
                             }
                         }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Logout",
-            "item": [
-                {
-                    "name": "[POST] api\/logout",
+                    ],
                     "request": {
                         "method": "POST",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/logout",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "logout"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
+                            "raw": "{{base_url}}/logout",
+                            "host": ["{{base_url}}"],
+                            "path": ["logout"]
                         }
                     },
                     "response": []
-                }
-            ]
-        },
-        {
-            "name": "Me",
-            "item": [
+                },
                 {
-                    "name": "[GET] api\/me",
+                    "name": "[GET] Me",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Response is user data', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('id');",
+                                    "    pm.expect(json.data || json).to.have.property('email');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/me",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "me"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/me",
+                            "host": ["{{base_url}}"],
+                            "path": ["me"]
                         }
                     },
                     "response": []
@@ -206,200 +225,189 @@
             "name": "Rooms",
             "item": [
                 {
-                    "name": "[GET] api\/rooms",
+                    "name": "[GET] List all rooms",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Response is array of rooms', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.be.an('array');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/rooms",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "rooms"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/rooms",
+                            "host": ["{{base_url}}"],
+                            "path": ["rooms"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[GET] api\/rooms\/{room}",
+                    "name": "[GET] Show room by ID",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Response has room data', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('id');",
+                                    "    pm.expect(json.data || json).to.have.property('name');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/rooms\/:room",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "rooms",
-                                ":room"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "room",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/rooms/{{room_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["rooms", "{{room_id}}"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[POST] api\/rooms",
+                    "name": "[POST] Create room (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                                    "pm.test('Room created with correct name', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('name');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "POST",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
                             }
                         ],
-                        "url": {
-                            "raw": "{{base_url}}\/rooms",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "rooms"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"Room VIP 2\",\n    \"type\": \"VIP\"\n}",
+                            "raw": "{\n    \"name\": \"VIP Room 2\",\n    \"type\": \"VIP\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
                                 }
                             }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/rooms",
+                            "host": ["{{base_url}}"],
+                            "path": ["rooms"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[PUT] api\/rooms\/{room}",
+                    "name": "[PUT] Update room (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Room updated', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('name', 'VIP Room Updated');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "PUT",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
                             }
                         ],
-                        "url": {
-                            "raw": "{{base_url}}\/rooms\/:room",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "rooms",
-                                ":room"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "room",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \n}",
+                            "raw": "{\n    \"name\": \"VIP Room Updated\",\n    \"type\": \"VIP\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
                                 }
                             }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/rooms/{{room_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["rooms", "{{room_id}}"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[DELETE] api\/rooms\/{room}",
+                    "name": "[DELETE] Delete room (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 204', () => pm.response.to.have.status(204));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "DELETE",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/rooms\/:room",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "rooms",
-                                ":room"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "room",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/rooms/{{room_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["rooms", "{{room_id}}"]
                         }
                     },
                     "response": []
@@ -407,75 +415,70 @@
             ]
         },
         {
-            "name": "Pcs",
+            "name": "PCs",
             "item": [
                 {
-                    "name": "[GET] api\/pcs",
+                    "name": "[GET] List all PCs",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Response is array', () => {",
+                                    "    pm.expect(pm.response.json().data || pm.response.json()).to.be.an('array');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/pcs",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pcs"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/pcs",
+                            "host": ["{{base_url}}"],
+                            "path": ["pcs"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[GET] api\/pcs\/{pc}",
+                    "name": "[GET] Show PC by ID",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Response has PC data', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('id');",
+                                    "    pm.expect(json.data || json).to.have.property('code');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/pcs\/:pc",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pcs",
-                                ":pc"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "pc",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/pcs/{{pc_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["pcs", "{{pc_id}}"]
                         }
                     },
                     "response": []
@@ -486,646 +489,59 @@
             "name": "Games",
             "item": [
                 {
-                    "name": "[GET] api\/games",
+                    "name": "[GET] List all games",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/games",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "games"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/games",
+                            "host": ["{{base_url}}"],
+                            "path": ["games"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[GET] api\/games\/{game}",
+                    "name": "[GET] Show game by ID",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/games\/:game",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "games",
-                                ":game"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "game",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        }
-                    },
-                    "response": []
-                }
-            ]
-        },
-        {
-            "name": "Gaming-sessions",
-            "item": [
-                {
-                    "name": "[GET] api\/gaming-sessions",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/gaming-sessions",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "gaming-sessions"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[GET] api\/gaming-sessions\/{gamingSession}",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/gaming-sessions\/:gamingSession",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "gaming-sessions",
-                                ":gamingSession"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "gamingSession",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[DELETE] api\/gaming-sessions\/{gamingSession}",
-                    "request": {
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/gaming-sessions\/:gamingSession",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "gaming-sessions",
-                                ":gamingSession"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "gamingSession",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[GET] api\/gaming-sessions\/{gamingSessionId}\/games",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/gaming-sessions\/:gamingSessionId\/games",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "gaming-sessions",
-                                ":gamingSessionId",
-                                "games"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "gamingSessionId",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[POST] api\/gaming-sessions\/{gamingSessionId}\/games",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/gaming-sessions\/:gamingSessionId\/games",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "gaming-sessions",
-                                ":gamingSessionId",
-                                "games"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "gamingSessionId",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"game_id\": 1,\n    \"notes\": \"Ranked match\"\n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                }
-            ]
-        },
-        {
-            "name": "Food-beverages",
-            "item": [
-                {
-                    "name": "[GET] api\/food-beverages",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/food-beverages",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "food-beverages"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[GET] api\/food-beverages\/{food_beverage}",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/food-beverages\/:food_beverage",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "food-beverages",
-                                ":food_beverage"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "food_beverage",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[POST] api\/food-beverages",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/food-beverages",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "food-beverages"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"name\": \"Indomie Telur\",\n    \"category\": \"food\",\n    \"price\": 10000,\n    \"stock\": 50,\n    \"is_available\": true\n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[PUT] api\/food-beverages\/{foodBeverage}",
-                    "request": {
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/food-beverages\/:foodBeverage",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "food-beverages",
-                                ":foodBeverage"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "foodBeverage",
-                                    "value": "2"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[DELETE] api\/food-beverages\/{foodBeverage}",
-                    "request": {
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/food-beverages\/:foodBeverage",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "food-beverages",
-                                ":foodBeverage"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "foodBeverage",
-                                    "value": "2"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        }
-                    },
-                    "response": []
-                }
-            ]
-        },
-        {
-            "name": "Food-orders",
-            "item": [
-                {
-                    "name": "[GET] api\/food-orders",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/food-orders",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "food-orders"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[GET] api\/food-orders\/{food_order}",
-                    "request": {
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/food-orders\/:food_order",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "food-orders",
-                                ":food_order"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "food_order",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[PUT] api\/food-orders\/{foodOrder}\/status",
-                    "request": {
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/food-orders\/:foodOrder\/status",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "food-orders",
-                                ":foodOrder",
-                                "status"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "foodOrder",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"status\": \"paid\"\n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "[POST] api\/food-orders",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/food-orders",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "food-orders"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"gaming_session_id\": 1,\n    \"pelanggan_id\": 1,\n    \"items\": [\n        {\n            \"food_beverage_id\": 2,\n            \"quantity\": 2\n        }\n    ]\n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
+                            "raw": "{{base_url}}/games/{{game_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["games", "{{game_id}}"]
                         }
                     },
                     "response": []
@@ -1136,200 +552,174 @@
             "name": "Operators",
             "item": [
                 {
-                    "name": "[GET] api\/operators",
+                    "name": "[GET] List all operators (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/operators",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "operators"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/operators",
+                            "host": ["{{base_url}}"],
+                            "path": ["operators"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[POST] api\/operators",
+                    "name": "[POST] Create operator (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 201', () => pm.response.to.have.status(201));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "POST",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
                             }
                         ],
-                        "url": {
-                            "raw": "{{base_url}}\/operators",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "operators"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"user_id\": 2,\n    \"room_id\": 1,\n    \"shift\": \"Pagi\"\n}",
+                            "raw": "{\n    \"user_id\": {{operator_user_id}},\n    \"room_id\": {{room_id}},\n    \"shift\": \"Pagi\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
                                 }
                             }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/operators",
+                            "host": ["{{base_url}}"],
+                            "path": ["operators"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[GET] api\/operators\/{operator}",
+                    "name": "[GET] Show operator (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/operators\/:operator",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "operators",
-                                ":operator"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "operator",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/operators/{{operator_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["operators", "{{operator_id}}"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[PUT] api\/operators\/{operator}",
+                    "name": "[PUT] Update operator (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "PUT",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
                             }
                         ],
-                        "url": {
-                            "raw": "{{base_url}}\/operators\/:operator",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "operators",
-                                ":operator"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "operator",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \n}",
+                            "raw": "{\n    \"shift\": \"Malam\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
                                 }
                             }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/operators/{{operator_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["operators", "{{operator_id}}"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[DELETE] api\/operators\/{operator}",
+                    "name": "[DELETE] Delete operator (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200 or 204', () => {",
+                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "DELETE",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/operators\/:operator",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "operators",
-                                ":operator"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "operator",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/operators/{{operator_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["operators", "{{operator_id}}"]
                         }
                     },
                     "response": []
@@ -1340,66 +730,63 @@
             "name": "Memberships",
             "item": [
                 {
-                    "name": "[GET] api\/memberships",
+                    "name": "[GET] List all memberships (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/memberships",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "memberships"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/memberships",
+                            "host": ["{{base_url}}"],
+                            "path": ["memberships"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[POST] api\/memberships",
+                    "name": "[POST] Create membership (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                                    "pm.test('Membership created', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('level');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "POST",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
                             }
                         ],
-                        "url": {
-                            "raw": "{{base_url}}\/memberships",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "memberships"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
                         "body": {
                             "mode": "raw",
                             "raw": "{\n    \"level\": \"Diamond\",\n    \"discount_percent\": 20\n}",
@@ -1408,132 +795,708 @@
                                     "language": "json"
                                 }
                             }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/memberships",
+                            "host": ["{{base_url}}"],
+                            "path": ["memberships"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[GET] api\/memberships\/{membership}",
+                    "name": "[GET] Show membership (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/memberships\/:membership",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "memberships",
-                                ":membership"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "membership",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/memberships/{{membership_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["memberships", "{{membership_id}}"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[PUT] api\/memberships\/{membership}",
+                    "name": "[PUT] Update membership (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Membership updated', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('discount_percent', 25);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "PUT",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
                             }
                         ],
-                        "url": {
-                            "raw": "{{base_url}}\/memberships\/:membership",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "memberships",
-                                ":membership"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "membership",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \n}",
+                            "raw": "{\n    \"discount_percent\": 25\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
                                 }
                             }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/memberships/{{membership_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["memberships", "{{membership_id}}"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[DELETE] api\/memberships\/{membership}",
+                    "name": "[DELETE] Delete membership (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200 or 204', () => {",
+                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                                    "});",
+                                    "pm.test('Has success message', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    if (json.message) pm.expect(json.message).to.include('berhasil');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "DELETE",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/memberships\/:membership",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "memberships",
-                                ":membership"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "membership",
-                                    "value": "1"
+                            "raw": "{{base_url}}/memberships/{{membership_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["memberships", "{{membership_id}}"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Food & Beverages",
+            "item": [
+                {
+                    "name": "[GET] List food & beverages",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/food-beverages",
+                            "host": ["{{base_url}}"],
+                            "path": ["food-beverages"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[GET] Show food/beverage by ID",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/food-beverages/{{food_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["food-beverages", "{{food_id}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[POST] Create food/beverage (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                                    "pm.test('Item created', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('name');",
+                                    "    pm.expect(json.data || json).to.have.property('price');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Indomie Telur\",\n    \"category\": \"food\",\n    \"price\": 10000,\n    \"stock\": 50,\n    \"is_available\": true\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
                                 }
-                            ]
+                            }
                         },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
+                        "url": {
+                            "raw": "{{base_url}}/food-beverages",
+                            "host": ["{{base_url}}"],
+                            "path": ["food-beverages"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[PUT] Update food/beverage (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Item updated', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('price', 12000);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"price\": 12000,\n    \"stock\": 40\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
                                 }
-                            ]
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/food-beverages/{{food_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["food-beverages", "{{food_id}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[DELETE] Delete food/beverage (admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200 or 204', () => {",
+                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/food-beverages/{{food_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["food-beverages", "{{food_id}}"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Gaming Sessions",
+            "item": [
+                {
+                    "name": "[GET] List gaming sessions",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Response is array', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.be.an('array');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/gaming-sessions",
+                            "host": ["{{base_url}}"],
+                            "path": ["gaming-sessions"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[GET] Show gaming session",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Response has session data', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('id');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/gaming-sessions/{{session_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["gaming-sessions", "{{session_id}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[DELETE] Delete gaming session (admin/operator)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200 or 204', () => {",
+                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/gaming-sessions/{{session_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["gaming-sessions", "{{session_id}}"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Booking Sessions",
+            "item": [
+                {
+                    "name": "[POST] Create booking session (pelanggan)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                                    "pm.test('Session created with active status', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('status');",
+                                    "});",
+                                    "const json = pm.response.json();",
+                                    "if (json.data && json.data.id) {",
+                                    "    pm.collectionVariables.set('session_id', json.data.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"pelanggan_id\": {{pelanggan_id}},\n    \"room_id\": {{room_id}},\n    \"pc_id\": {{pc_id}},\n    \"operator_id\": {{operator_id}}\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/booking-sessions",
+                            "host": ["{{base_url}}"],
+                            "path": ["booking-sessions"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Session Games",
+            "item": [
+                {
+                    "name": "[GET] List games in session",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/gaming-sessions/{{session_id}}/games",
+                            "host": ["{{base_url}}"],
+                            "path": ["gaming-sessions", "{{session_id}}", "games"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[POST] Add game to session",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                                    "pm.test('Game added to session', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('game_id');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"game_id\": {{game_id}},\n    \"notes\": \"Ranked match\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/gaming-sessions/{{session_id}}/games",
+                            "host": ["{{base_url}}"],
+                            "path": ["gaming-sessions", "{{session_id}}", "games"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Food Orders",
+            "item": [
+                {
+                    "name": "[GET] List food orders",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/food-orders",
+                            "host": ["{{base_url}}"],
+                            "path": ["food-orders"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[GET] Show food order",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Order has items', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('id');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/food-orders/{{food_order_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["food-orders", "{{food_order_id}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[POST] Create food order (pelanggan)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                                    "pm.test('Order created with pending status', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('status', 'pending');",
+                                    "});",
+                                    "const json = pm.response.json();",
+                                    "if (json.data && json.data.id) {",
+                                    "    pm.collectionVariables.set('food_order_id', json.data.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"gaming_session_id\": {{session_id}},\n    \"pelanggan_id\": {{pelanggan_id}},\n    \"items\": [\n        {\n            \"food_beverage_id\": {{food_id}},\n            \"quantity\": 2\n        }\n    ]\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/food-orders",
+                            "host": ["{{base_url}}"],
+                            "path": ["food-orders"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "[PUT] Update food order status (admin/operator)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Order status updated', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('status', 'paid');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"status\": \"paid\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/food-orders/{{food_order_id}}/status",
+                            "host": ["{{base_url}}"],
+                            "path": ["food-orders", "{{food_order_id}}", "status"]
                         }
                     },
                     "response": []
@@ -1544,200 +1507,187 @@
             "name": "Payments",
             "item": [
                 {
-                    "name": "[GET] api\/payments",
+                    "name": "[GET] List payments (admin/operator)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/payments",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "payments"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/payments",
+                            "host": ["{{base_url}}"],
+                            "path": ["payments"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[POST] api\/payments",
+                    "name": "[POST] Create payment (admin/operator)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                                    "pm.test('Payment created', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('nominal');",
+                                    "    pm.expect(json.data || json).to.have.property('method');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "POST",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
                             }
                         ],
-                        "url": {
-                            "raw": "{{base_url}}\/payments",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "payments"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"gaming_session_id\": 1,\n    \"nominal\": 50000,\n    \"method\": \"cash\"\n}",
+                            "raw": "{\n    \"gaming_session_id\": {{session_id}},\n    \"nominal\": 50000,\n    \"method\": \"cash\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
                                 }
                             }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/payments",
+                            "host": ["{{base_url}}"],
+                            "path": ["payments"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[GET] api\/payments\/{payment}",
+                    "name": "[GET] Show payment (admin/operator)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/payments\/:payment",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "payments",
-                                ":payment"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "payment",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/payments/{{payment_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["payments", "{{payment_id}}"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[PUT] api\/payments\/{payment}",
+                    "name": "[PUT] Update payment (admin/operator)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Payment updated', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('method', 'qris');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "PUT",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
                             }
                         ],
-                        "url": {
-                            "raw": "{{base_url}}\/payments\/:payment",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "payments",
-                                ":payment"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "payment",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \n}",
+                            "raw": "{\n    \"method\": \"qris\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
                                 }
                             }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/payments/{{payment_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["payments", "{{payment_id}}"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[DELETE] api\/payments\/{payment}",
+                    "name": "[DELETE] Delete payment (admin/operator)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200 or 204', () => {",
+                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                                    "});",
+                                    "pm.test('Has success message', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    if (json.message) pm.expect(json.message).to.include('berhasil');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "DELETE",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/payments\/:payment",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "payments",
-                                ":payment"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "payment",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/payments/{{payment_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["payments", "{{payment_id}}"]
                         }
                     },
                     "response": []
@@ -1745,249 +1695,192 @@
             ]
         },
         {
-            "name": "Pelanggans",
+            "name": "Pelanggans (Customers)",
             "item": [
                 {
-                    "name": "[GET] api\/pelanggans",
+                    "name": "[GET] List pelanggans (admin/operator)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Response is array', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.be.an('array');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/pelanggans",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pelanggans"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/pelanggans",
+                            "host": ["{{base_url}}"],
+                            "path": ["pelanggans"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[POST] api\/pelanggans",
+                    "name": "[POST] Create pelanggan (admin/operator)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                                    "pm.test('Pelanggan created', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('user_id');",
+                                    "    pm.expect(json.data || json).to.have.property('status');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "POST",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
                             }
                         ],
-                        "url": {
-                            "raw": "{{base_url}}\/pelanggans",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pelanggans"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"user_id\": 3,\n    \"membership_id\": 2,\n    \"status\": \"active\"\n}",
+                            "raw": "{\n    \"user_id\": {{pelanggan_user_id}},\n    \"membership_id\": {{membership_id}},\n    \"status\": \"active\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
                                 }
                             }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/pelanggans",
+                            "host": ["{{base_url}}"],
+                            "path": ["pelanggans"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[GET] api\/pelanggans\/{pelanggan}",
+                    "name": "[GET] Show pelanggan (admin/operator)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Response has user relation', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('user');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/pelanggans\/:pelanggan",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pelanggans",
-                                ":pelanggan"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "pelanggan",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
+                            "raw": "{{base_url}}/pelanggans/{{pelanggan_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["pelanggans", "{{pelanggan_id}}"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[PUT] api\/pelanggans\/{pelanggan}",
+                    "name": "[PUT] Update pelanggan (admin/operator)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Pelanggan updated', () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.data || json).to.have.property('status', 'inactive');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "PUT",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
                             }
                         ],
-                        "url": {
-                            "raw": "{{base_url}}\/pelanggans\/:pelanggan",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pelanggans",
-                                ":pelanggan"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "pelanggan",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \n}",
+                            "raw": "{\n    \"status\": \"inactive\"\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
                                 }
                             }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/pelanggans/{{pelanggan_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["pelanggans", "{{pelanggan_id}}"]
                         }
                     },
                     "response": []
                 },
                 {
-                    "name": "[DELETE] api\/pelanggans\/{pelanggan}",
+                    "name": "[DELETE] Delete pelanggan (admin/operator)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 204', () => pm.response.to.have.status(204));"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "DELETE",
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application\/json"
+                                "value": "application/json"
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}\/pelanggans\/:pelanggan",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pelanggans",
-                                ":pelanggan"
-                            ],
-                            "variable": [
-                                {
-                                    "key": "pelanggan",
-                                    "value": "1"
-                                }
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        }
-                    },
-                    "response": []
-                }
-            ]
-        },
-        {
-            "name": "Booking-sessions",
-            "item": [
-                {
-                    "name": "[POST] api\/booking-sessions",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "url": {
-                            "raw": "{{base_url}}\/booking-sessions",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "booking-sessions"
-                            ]
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"pelanggan_id\": 1,\n    \"room_id\": 1,\n    \"pc_id\": 1,\n    \"operator_id\": 1\n}",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            }
+                            "raw": "{{base_url}}/pelanggans/{{pelanggan_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["pelanggans", "{{pelanggan_id}}"]
                         }
                     },
                     "response": []
@@ -1998,12 +1891,72 @@
     "variable": [
         {
             "key": "base_url",
-            "value": "http:\/\/localhost:8000\/api",
+            "value": "http://localhost:8000/api",
             "type": "string"
         },
         {
             "key": "token",
             "value": "",
+            "type": "string"
+        },
+        {
+            "key": "room_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "pc_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "game_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "operator_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "operator_user_id",
+            "value": "2",
+            "type": "string"
+        },
+        {
+            "key": "membership_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "food_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "session_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "food_order_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "payment_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "pelanggan_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "pelanggan_user_id",
+            "value": "3",
             "type": "string"
         }
     ]

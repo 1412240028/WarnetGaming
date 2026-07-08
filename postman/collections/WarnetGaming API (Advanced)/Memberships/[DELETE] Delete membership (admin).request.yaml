@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{base_url}}/memberships/{{membership_id}}"
+method: DELETE
+headers:
+  Accept: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status 200 or 204', () => {
+          pm.expect(pm.response.code).to.be.oneOf([200, 204]);
+      });
+      pm.test('Has success message', () => {
+          const json = pm.response.json();
+          if (json.message) pm.expect(json.message).to.include('berhasil');
+      });
+    language: text/javascript
+order: 5000

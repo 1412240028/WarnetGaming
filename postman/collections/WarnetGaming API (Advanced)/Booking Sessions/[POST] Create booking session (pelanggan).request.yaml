@@ -1,0 +1,29 @@
+$kind: http-request
+url: "{{base_url}}/booking-sessions"
+method: POST
+headers:
+  Accept: application/json
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "pelanggan_id": {{pelanggan_id}},
+        "room_id": {{room_id}},
+        "pc_id": {{pc_id}},
+        "operator_id": {{operator_id}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status 201', () => pm.response.to.have.status(201));
+      pm.test('Session created with active status', () => {
+          const json = pm.response.json();
+          pm.expect(json.data || json).to.have.property('status');
+      });
+      const json = pm.response.json();
+      if (json.data && json.data.id) {
+          pm.collectionVariables.set('session_id', json.data.id);
+      }
+    language: text/javascript
+order: 1000

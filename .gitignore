@@ -40,3 +40,6 @@ routes.json
 
 # File soal (tidak perlu diupload ke repo)
 Soal_UAS_BasisDataLanjut_TakeHome.pdf
+
+# File AI Agent
+Agents.md

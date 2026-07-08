@@ -1,0 +1,23 @@
+$kind: http-request
+name: "[PUT] Update pelanggan (admin/operator)"
+url: "{{base_url}}/pelanggans/{{pelanggan_id}}"
+method: PUT
+headers:
+  Accept: application/json
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "status": "inactive"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status 200', () => pm.response.to.have.status(200));
+      pm.test('Pelanggan updated', () => {
+          const json = pm.response.json();
+          pm.expect(json.data || json).to.have.property('status', 'inactive');
+      });
+    language: text/javascript
+order: 4000

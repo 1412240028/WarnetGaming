@@ -1,5 +1,38 @@
 $kind: collection
-description: Advanced Postman collection with auto-token script, path variables, and sample payloads.
+description: |-
+  Complete Postman collection for WarnetGaming REST API.
+
+  ## Setup
+  1. Import this collection into Postman.
+  2. Set `base_url` collection variable to your server (default: http://localhost:8000/api).
+  3. Run `[POST] Login` first to auto-set the `token` variable.
+
+  ## Auth
+  - All protected endpoints auto-inherit the Bearer token via collection-level auth.
+  - Token is auto-extracted from login response.
+
+  ## Roles
+  - `role:admin` — full CRUD on rooms, operators, memberships, food-beverages.
+  - `role:admin,operator` — payments, pelanggans, gaming-sessions destroy, food-order status.
+  - `pelanggan` — booking-sessions, food-orders, read-only masters.
 variables:
   base_url: http://localhost:8000/api
   token: ""
+  room_id: "1"
+  pc_id: "1"
+  game_id: "1"
+  operator_id: "1"
+  operator_user_id: "2"
+  membership_id: "1"
+  food_id: "1"
+  session_id: "1"
+  food_order_id: "1"
+  payment_id: "1"
+  pelanggan_id: "1"
+  pelanggan_user_id: "3"
+auth:
+  - id: b8169ab8-a775-485e-ad6b-bae374eb6694
+    type: bearer
+    name: bearer auth
+    credentials:
+      token: "{{token}}"

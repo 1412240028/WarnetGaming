@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{base_url}}/operators/{{operator_id}}"
+method: PUT
+headers:
+  Accept: application/json
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "shift": "Malam"
+    }
+scripts:
+  - type: afterResponse
+    code: pm.test('Status 200', () => pm.response.to.have.status(200));
+    language: text/javascript
+order: 4000
