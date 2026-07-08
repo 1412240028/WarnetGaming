@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{base_url}}/gaming-sessions"
+method: GET
+headers:
+  Accept: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status 200', () => pm.response.to.have.status(200));
+      pm.test('Response is array', () => {
+          const json = pm.response.json();
+          pm.expect(json.data || json).to.be.an('array');
+      });
+    language: text/javascript
+order: 1000

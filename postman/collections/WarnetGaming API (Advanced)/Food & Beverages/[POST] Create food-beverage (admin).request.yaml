@@ -1,0 +1,28 @@
+$kind: http-request
+name: "[POST] Create food/beverage (admin)"
+url: "{{base_url}}/food-beverages"
+method: POST
+headers:
+  Accept: application/json
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "name": "Indomie Telur",
+        "category": "food",
+        "price": 10000,
+        "stock": 50,
+        "is_available": true
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status 201', () => pm.response.to.have.status(201));
+      pm.test('Item created', () => {
+          const json = pm.response.json();
+          pm.expect(json.data || json).to.have.property('name');
+          pm.expect(json.data || json).to.have.property('price');
+      });
+    language: text/javascript
+order: 3000

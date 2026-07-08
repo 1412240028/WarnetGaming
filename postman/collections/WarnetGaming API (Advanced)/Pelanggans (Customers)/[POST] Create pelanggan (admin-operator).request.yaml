@@ -1,0 +1,26 @@
+$kind: http-request
+name: "[POST] Create pelanggan (admin/operator)"
+url: "{{base_url}}/pelanggans"
+method: POST
+headers:
+  Accept: application/json
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "user_id": {{pelanggan_user_id}},
+        "membership_id": {{membership_id}},
+        "status": "active"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status 201', () => pm.response.to.have.status(201));
+      pm.test('Pelanggan created', () => {
+          const json = pm.response.json();
+          pm.expect(json.data || json).to.have.property('user_id');
+          pm.expect(json.data || json).to.have.property('status');
+      });
+    language: text/javascript
+order: 2000

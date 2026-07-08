@@ -4,4 +4,5 @@ workspace:
 # Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
 
 cloudResources:
-  collections: {}
+  collections:
+    ../postman/collections/WarnetGaming API (Advanced): 0b18f363-36a0-4699-9462-d9b85dfdb137
